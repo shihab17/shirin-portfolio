@@ -46,3 +46,30 @@ export async function fetchProjects(): Promise<CmsProject[]> {
     return [];
   }
 }
+
+export interface CmsBrand {
+  name: string;
+  monogram: string;
+  service?: string;
+  link?: string;
+}
+
+const BRANDS_QUERY = `*[_type == "brand"] | order(order asc, _createdAt asc) {
+  name, monogram, service, link
+}`;
+
+export async function fetchBrands(): Promise<CmsBrand[]> {
+  try {
+    const docs = await sanityClient.fetch(BRANDS_QUERY);
+    if (!Array.isArray(docs) || docs.length === 0) return [];
+    return docs.map((d: any) => ({
+      name: d.name || '',
+      monogram: (d.monogram || (d.name || '?')[0]).toUpperCase(),
+      service: d.service || undefined,
+      link: d.link || undefined,
+    }));
+  } catch (e) {
+    console.warn('[sanity] fetchBrands failed, using local data:', e);
+    return [];
+  }
+}

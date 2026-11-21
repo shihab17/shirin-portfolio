@@ -74,11 +74,46 @@ const project = defineType({
   ],
 });
 
+const brand = defineType({
+  name: 'brand',
+  title: 'Trusted By — Brand',
+  type: 'document',
+  fields: [
+    defineField({
+      name: 'name',
+      type: 'string',
+      validation: (r) => r.required(),
+    }),
+    defineField({
+      name: 'monogram',
+      title: 'Monogram letters',
+      type: 'string',
+      description: '1–2 letters shown in the badge, e.g. "C". Leave empty to use the first letter of the name.',
+    }),
+    defineField({
+      name: 'service',
+      title: 'Work done',
+      type: 'string',
+      description: 'Short label, e.g. "Social Ads"',
+    }),
+    defineField({ name: 'link', title: 'Link (optional)', type: 'url' }),
+    defineField({
+      name: 'order',
+      title: 'Sort order',
+      type: 'number',
+      description: 'Lower numbers appear first',
+    }),
+  ],
+  orderings: [
+    { title: 'Sort order', name: 'orderAsc', by: [{ field: 'order', direction: 'asc' }] },
+  ],
+});
+
 export default defineConfig({
   name: 'shirin-portfolio',
   title: 'Shirin Portfolio',
   projectId: 'xr2t6hgu',
   dataset: 'production',
   plugins: [structureTool()],
-  schema: { types: [project] },
+  schema: { types: [project, brand] },
 });

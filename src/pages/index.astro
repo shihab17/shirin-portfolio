@@ -7,12 +7,15 @@ import Icon from '../components/Icon.astro';
 import { site } from '../site';
 import { projects as localProjects, videoPoster, videoSrc, categoryLabel, featuredId } from '../data/projects';
 import type { Category } from '../data/projects';
-import { fetchProjects } from '../lib/sanity';
+import { fetchProjects, fetchBrands } from '../lib/sanity';
+import { brands as localBrands } from '../data/brands';
 
 // Sanity is the source of truth when it returns projects; the local file
 // stays as a build-time fallback if the API is unreachable or empty.
 const cmsProjects = await fetchProjects();
 const projects = cmsProjects.length ? cmsProjects : localProjects;
+const cmsBrands = await fetchBrands();
+const brands = cmsBrands.length ? cmsBrands : localBrands;
 
 const catOrder: Category[] = ['motion', 'cinematic', 'animation', 'ai', 'story'];
 const catCounts = projects.reduce<Record<string, number>>((m, p) => {
@@ -158,7 +161,19 @@ const jsonLd = {
   <section class="alt"><div class="wrap">
     <h2 class="serif">Trusted <em>By</em></h2>
     <p class="lead">Brands and businesses I have worked with</p>
-    <div class="brands"><span>Chonk</span><span>Home-made Baby Food by Jafrin</span><span>USA-based Website Client</span></div>
+    <div class="brands">
+      {brands.map((b) => {
+        const inner = (
+          <Fragment>
+            <span class="bmark serif" aria-hidden="true">{b.monogram}</span>
+            <span class="binfo"><b>{b.name}</b>{b.service && <i>{b.service}</i>}</span>
+          </Fragment>
+        );
+        return b.link
+          ? <a class="brand" href={b.link} target="_blank" rel="noopener noreferrer">{inner}</a>
+          : <span class="brand">{inner}</span>;
+      })}
+    </div>
   </div></section>
 
   <section id="work">
