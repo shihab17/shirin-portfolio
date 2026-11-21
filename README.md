@@ -36,3 +36,14 @@ Canonical URL / sitemap / OG URLs resolve automatically: at build time Cloudflar
 - `sitemap-index.xml` (auto, includes video namespace) + dynamic `robots.txt`
 - `favicon.svg` + `site.webmanifest`
 - Posters/images optimized to WebP at build; videos `preload="none"`; curtain ~1.5s and skipped on repeat visits (LCP-friendly)
+
+## Content management — Sanity CMS
+
+Projects (title, category, description, poster, video) are edited in the hosted Sanity Studio:
+
+- **Studio URL:** https://shirin-nupur.sanity.studio/ (login with a Sanity account added to project `xr2t6hgu`)
+- **Schema:** `sanity.config.ts` → `project` document
+- **Data layer:** `src/lib/sanity.ts` fetches published projects at build time; `src/data/projects.ts` is the fallback if the API is unreachable or returns nothing.
+- To redeploy the studio after schema changes: `SANITY_AUTH_TOKEN=<token> npx sanity deploy`
+
+**Auto-republish on content change:** create a Cloudflare Pages *Deploy Hook* (project → Settings → Builds & deployments → Deploy hooks), then in sanity.io/manage → project → API → Webhooks, add a webhook that POSTs to the deploy-hook URL on document create/update/delete. Publishing in the Studio then triggers a fresh static build.

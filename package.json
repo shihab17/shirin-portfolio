@@ -11,9 +11,19 @@
     "gen:favicon": "node scripts/gen-favicon.mjs"
   },
   "dependencies": {
+    "@astrojs/react": "^7.0.1",
     "@astrojs/sitemap": "^3.7.6",
+    "@sanity/astro": "^4.1.0",
+    "@sanity/client": "^8.17.0",
+    "@sanity/image-url": "^2.2.0",
+    "@sanity/visual-editing-standalone": "^2.0.4",
     "astro": "^7.3.8",
-    "motion": "^14.14.0"
+    "motion": "^14.14.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-is": "^19.3.1",
+    "sanity": "^6.24.0",
+    "styled-components": "^6.6.0"
   },
   "devDependencies": {
     "sharp": "^0.35.0"

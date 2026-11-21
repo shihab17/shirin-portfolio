@@ -5,8 +5,14 @@ import Base from '../layouts/Base.astro';
 import VideoCard from '../components/VideoCard.astro';
 import Icon from '../components/Icon.astro';
 import { site } from '../site';
-import { projects, videoPoster, videoSrc, categoryLabel, featuredId } from '../data/projects';
+import { projects as localProjects, videoPoster, videoSrc, categoryLabel, featuredId } from '../data/projects';
 import type { Category } from '../data/projects';
+import { fetchProjects } from '../lib/sanity';
+
+// Sanity is the source of truth when it returns projects; the local file
+// stays as a build-time fallback if the API is unreachable or empty.
+const cmsProjects = await fetchProjects();
+const projects = cmsProjects.length ? cmsProjects : localProjects;
 
 const catOrder: Category[] = ['motion', 'cinematic', 'animation', 'ai', 'story'];
 const catCounts = projects.reduce<Record<string, number>>((m, p) => {
@@ -37,11 +43,16 @@ const marqueeItems = [
 ] as const;
 
 // Optimized webp posters for every video card (also used for the blurred
-// frame background and the VideoObject thumbnailUrl).
+// frame background and the VideoObject thumbnailUrl). CMS projects already
+// carry a Sanity CDN poster; local ones go through Astro's image pipeline.
 const posters: Record<string, string> = {};
+const srcs: Record<string, string> = {};
 for (const p of projects) {
-  const opt = await getImage({ src: asset(videoPoster(p.id)), format: 'webp', width: 720 });
-  posters[p.id] = opt.src;
+  posters[p.id] =
+    'posterUrl' in p && p.posterUrl
+      ? p.posterUrl
+      : (await getImage({ src: asset(videoPoster(p.id)), format: 'webp', width: 720 })).src;
+  srcs[p.id] = 'videoUrl' in p && p.videoUrl ? p.videoUrl : videoSrc(p.id);
 }
 const ambient = projects.find((p) => p.id === featuredId)!;
 
@@ -85,8 +96,8 @@ const jsonLd = {
           name: `${p.title} — ${p.kind}`,
           description: p.description,
           thumbnailUrl: new URL(posters[p.id], site.url).href,
-          contentUrl: new URL(videoSrc(p.id), site.url).href,
-          uploadDate: '2026-11-21',
+          contentUrl: new URL(srcs[p.id], site.url).href,
+          uploadDate: ('uploadDate' in p && p.uploadDate) || '2026-11-21',
           duration: p.durationIso,
           genre: categoryLabel[p.category],
           author: { '@id': `${site.url}/#person` },
@@ -173,7 +184,7 @@ const jsonLd = {
             kind={p.kind}
             chips={p.chips}
             poster={posters[p.id]}
-            src={videoSrc(p.id)}
+            src={srcs[p.id]}
             description={p.description}
             category={p.category}
           />
