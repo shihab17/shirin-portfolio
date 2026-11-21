@@ -18,6 +18,12 @@ a:focus-visible,button:focus-visible,video:focus-visible{outline:2px solid var(-
 /* hero */
 .hero{position:relative;overflow:hidden;text-align:center;margin-top:calc(-1*env(safe-area-inset-top,0px));padding-top:calc(env(safe-area-inset-top,0px) + 64px);padding-bottom:64px;
   background:radial-gradient(60% 70% at 50% -10%,#1b6a4f 0%,transparent 70%),radial-gradient(40% 50% at 100% 100%,rgba(234,185,168,.16),transparent 70%),radial-gradient(40% 50% at 0 90%,rgba(227,201,149,.10),transparent 70%),var(--ink)}
+.hero-bg{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.hero-bg img,.hero-bg video{position:absolute;inset:-6%;width:112%;height:112%;object-fit:cover;filter:blur(26px) brightness(.42) saturate(1.15)}
+.hero-bg img{animation:heroZoom 26s ease-in-out infinite alternate}
+.hero-bg video{opacity:0;transition:opacity 1.4s ease}
+.hero-bg video.on{opacity:.38}
+@keyframes heroZoom{from{transform:scale(1)}to{transform:scale(1.12) translate(-1.2%,1%)}}
 .badge{width:118px;height:118px;margin:0 auto 22px;position:relative}
 .badge svg{width:100%;height:100%;animation:spin 28s linear infinite}
 .badge svg text{font:500 8px var(--sans);fill:var(--gold);text-transform:uppercase;letter-spacing:1px}
@@ -130,7 +136,7 @@ h2 em{color:var(--gold);font-style:italic}
 .contact .lead{margin:10px auto 0}
 .contact .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:28px}
 footer{text-align:center;padding:26px 16px calc(26px + env(safe-area-inset-bottom,0px));font-size:12px;color:var(--mut);letter-spacing:.2em;background:var(--ink)}
-@media(prefers-reduced-motion:reduce){.badge svg,.marq div{animation:none}html{scroll-behavior:auto}}
+@media(prefers-reduced-motion:reduce){.badge svg,.marq div,.hero-bg img{animation:none}html{scroll-behavior:auto}}
 
 /* ===== motion layer ===== */
 .js .hi,.js .rv{opacity:0}

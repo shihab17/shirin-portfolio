@@ -5,7 +5,7 @@ import Base from '../layouts/Base.astro';
 import VideoCard from '../components/VideoCard.astro';
 import Icon from '../components/Icon.astro';
 import { site } from '../site';
-import { projects, videoPoster, videoSrc, categoryLabel } from '../data/projects';
+import { projects, videoPoster, videoSrc, categoryLabel, featuredId } from '../data/projects';
 import type { Category } from '../data/projects';
 
 const catOrder: Category[] = ['motion', 'cinematic', 'animation', 'ai', 'story'];
@@ -43,6 +43,7 @@ for (const p of projects) {
   const opt = await getImage({ src: asset(videoPoster(p.id)), format: 'webp', width: 720 });
   posters[p.id] = opt.src;
 }
+const ambient = projects.find((p) => p.id === featuredId)!;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -105,6 +106,10 @@ const jsonLd = {
   </nav>
 
   <header class="hero" id="top">
+    <div class="hero-bg" aria-hidden="true">
+      <img src={posters[ambient.id]} alt="" />
+      <video src={videoSrc(ambient.id)} poster={posters[ambient.id]} muted loop playsinline preload="none"></video>
+    </div>
     <div class="orb o1"></div><div class="orb o2"></div><div class="spot"></div>
     <div class="wrap hero-in">
       <div class="badge hi" data-depth="28">

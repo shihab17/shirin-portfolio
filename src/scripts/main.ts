@@ -101,6 +101,16 @@ import { animate, inView } from 'motion';
     });
     root.classList.add('split-on');
 
+    /* ---------- ambient hero backdrop: idle-load the clip, fade in over the poster ---------- */
+    var amb = $('.hero-bg video') as HTMLVideoElement | null;
+    if (amb) {
+      var startAmb = function () {
+        amb!.play().then(function () { amb!.classList.add('on'); }).catch(function () {});
+      };
+      if ('requestIdleCallback' in window) requestIdleCallback(startAmb, { timeout: 3000 });
+      else setTimeout(startAmb, 1500);
+    }
+
     /* ---------- hero intro (right after the curtain lifts; near-instant on repeat visits) ---------- */
     var d0 = seen ? 0.1 : 0.9;
     var h1 = $('h1') as any;

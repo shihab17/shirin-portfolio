@@ -120,3 +120,6 @@ export const projects: Project[] = [
 
 export const videoPoster = (id: string) => `poster-${id}`;
 export const videoSrc = (id: string) => `/videos/${id}.mp4`;
+
+// Project used for the hero's ambient background clip.
+export const featuredId = '03';
