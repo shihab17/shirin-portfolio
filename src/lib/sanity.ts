@@ -16,11 +16,12 @@ export interface CmsProject extends Project {
   uploadDate?: string;
   posterUrl?: string;
   videoUrl?: string;
+  featured?: boolean;
 }
 
 const QUERY = `*[_type == "project"] | order(order asc, _createdAt asc) {
   id, order, title, kind, chips, category, description, durationIso, uploadDate,
-  poster, "videoUrl": video.asset->url
+  featured, poster, "videoUrl": video.asset->url
 }`;
 
 export async function fetchProjects(): Promise<CmsProject[]> {
@@ -36,6 +37,7 @@ export async function fetchProjects(): Promise<CmsProject[]> {
       description: d.description || '',
       durationIso: d.durationIso || '',
       uploadDate: d.uploadDate,
+      featured: !!d.featured,
       posterUrl: d.poster
         ? builder.image(d.poster).width(720).auto('format').url()
         : undefined,
@@ -75,5 +77,54 @@ export async function fetchBrands(): Promise<CmsBrand[]> {
   } catch (e) {
     console.warn('[sanity] fetchBrands failed, using local data:', e);
     return [];
+  }
+}
+
+export interface CmsConcept {
+  caption: string;
+  alt: string;
+  imageUrl: string;
+}
+
+const CONCEPTS_QUERY = `*[_type == "concept"] | order(order asc, _createdAt asc) {
+  caption, alt, image
+}`;
+
+export async function fetchConcepts(): Promise<CmsConcept[]> {
+  try {
+    const docs = await sanityClient.fetch(CONCEPTS_QUERY);
+    if (!Array.isArray(docs) || docs.length === 0) return [];
+    return docs
+      .filter((d: any) => d.image)
+      .map((d: any) => ({
+        caption: d.caption || '',
+        alt: d.alt || d.caption || 'Visual concept artwork',
+        imageUrl: builder.image(d.image).width(840).auto('format').url(),
+      }));
+  } catch (e) {
+    console.warn('[sanity] fetchConcepts failed, using local data:', e);
+    return [];
+  }
+}
+
+export interface CmsSettings {
+  tagline?: string;
+  description?: string;
+  whatsapp?: string;
+  whatsappLabel?: string;
+  facebook?: string;
+  facebookPage?: string;
+}
+
+const SETTINGS_QUERY = `*[_type == "siteSettings"][0]{
+  tagline, description, whatsapp, whatsappLabel, facebook, facebookPage
+}`;
+
+export async function fetchSiteSettings(): Promise<CmsSettings | null> {
+  try {
+    return (await sanityClient.fetch(SETTINGS_QUERY)) || null;
+  } catch (e) {
+    console.warn('[sanity] fetchSiteSettings failed, using local data:', e);
+    return null;
   }
 }

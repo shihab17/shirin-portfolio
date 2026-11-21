@@ -65,6 +65,13 @@ const project = defineType({
       type: 'file',
       options: { accept: 'video/*' },
     }),
+    defineField({
+      name: 'featured',
+      title: 'Featured in hero',
+      type: 'boolean',
+      description: 'Tick on ONE project — its poster is used behind the hero',
+      initialValue: false,
+    }),
   ],
   preview: {
     select: { title: 'title', subtitle: 'kind', media: 'poster' },
@@ -115,11 +122,60 @@ const brand = defineType({
   ],
 });
 
+const concept = defineType({
+  name: 'concept',
+  title: 'Visual Concept',
+  type: 'document',
+  fields: [
+    defineField({
+      name: 'caption',
+      type: 'string',
+      validation: (r) => r.required(),
+    }),
+    defineField({
+      name: 'image',
+      type: 'image',
+      options: { hotspot: true },
+      validation: (r) => r.required(),
+    }),
+    defineField({
+      name: 'alt',
+      title: 'Alt text',
+      type: 'string',
+      description: 'Describe the image — for screen readers and SEO',
+    }),
+    defineField({
+      name: 'order',
+      title: 'Sort order',
+      type: 'number',
+      description: 'Lower numbers appear first',
+    }),
+  ],
+  preview: { select: { title: 'caption', media: 'image' } },
+  orderings: [
+    { title: 'Sort order', name: 'orderAsc', by: [{ field: 'order', direction: 'asc' }] },
+  ],
+});
+
+const siteSettings = defineType({
+  name: 'siteSettings',
+  title: 'Site Settings',
+  type: 'document',
+  fields: [
+    defineField({ name: 'tagline', type: 'string', description: 'e.g. "Promotional Video Editor"' }),
+    defineField({ name: 'description', title: 'SEO description', type: 'text', rows: 3 }),
+    defineField({ name: 'whatsapp', title: 'WhatsApp link', type: 'url' }),
+    defineField({ name: 'whatsappLabel', title: 'WhatsApp button label', type: 'string' }),
+    defineField({ name: 'facebook', title: 'Facebook profile link', type: 'url' }),
+    defineField({ name: 'facebookPage', title: 'Facebook page link', type: 'url' }),
+  ],
+});
+
 export default defineConfig({
   name: 'shirin-portfolio',
   title: 'Shirin Portfolio',
   projectId: 'xr2t6hgu',
   dataset: 'production',
   plugins: [structureTool()],
-  schema: { types: [project, brand] },
+  schema: { types: [project, brand, concept, siteSettings] },
 });

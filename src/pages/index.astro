@@ -7,7 +7,7 @@ import Icon from '../components/Icon.astro';
 import { site } from '../site';
 import { projects as localProjects, videoPoster, videoSrc, categoryLabel, featuredId } from '../data/projects';
 import type { Category } from '../data/projects';
-import { fetchProjects, fetchBrands } from '../lib/sanity';
+import { fetchProjects, fetchBrands, fetchConcepts, fetchSiteSettings } from '../lib/sanity';
 import { brands as localBrands } from '../data/brands';
 
 // Sanity is the source of truth when it returns projects; the local file
@@ -16,6 +16,10 @@ const cmsProjects = await fetchProjects();
 const projects = cmsProjects.length ? cmsProjects : localProjects;
 const cmsBrands = await fetchBrands();
 const brands = cmsBrands.length ? cmsBrands : localBrands;
+const cmsConcepts = await fetchConcepts();
+// CMS site settings merge over site.ts — name/url/locale stay local.
+const cmsSettings = await fetchSiteSettings();
+const cfg = { ...site, ...(cmsSettings ?? {}) };
 
 const catOrder: Category[] = ['motion', 'cinematic', 'animation', 'ai', 'story'];
 const catCounts = projects.reduce<Record<string, number>>((m, p) => {
@@ -57,7 +61,9 @@ for (const p of projects) {
       : (await getImage({ src: asset(videoPoster(p.id)), format: 'webp', width: 720 })).src;
   srcs[p.id] = 'videoUrl' in p && p.videoUrl ? p.videoUrl : videoSrc(p.id);
 }
-const ambient = projects.find((p) => p.id === featuredId)!;
+const ambient =
+  projects.find((p) => 'featured' in p && p.featured) ??
+  projects.find((p) => p.id === featuredId)!;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -66,8 +72,8 @@ const jsonLd = {
       '@type': 'Person',
       '@id': `${site.url}/#person`,
       name: site.name,
-      jobTitle: site.tagline,
-      description: site.description,
+      jobTitle: cfg.tagline,
+      description: cfg.description,
       url: site.url,
       image: new URL('/og-image.jpg', site.url).href,
       knowsAbout: [
@@ -79,13 +85,13 @@ const jsonLd = {
         'Motion Graphics',
         'Sound Design',
       ],
-      sameAs: [site.facebook, site.facebookPage, site.whatsapp],
+      sameAs: [cfg.facebook, cfg.facebookPage, cfg.whatsapp],
     },
     {
       '@type': 'WebSite',
       url: site.url,
-      name: `${site.name} — ${site.tagline}`,
-      description: site.description,
+      name: `${site.name} — ${cfg.tagline}`,
+      description: cfg.description,
       author: { '@id': `${site.url}/#person` },
     },
     {
@@ -111,7 +117,7 @@ const jsonLd = {
 };
 ---
 
-<Base jsonLd={jsonLd}>
+<Base jsonLd={jsonLd} description={cfg.description}>
   <div class="curtain" aria-hidden="true"><i class="t"></i><i class="b"></i><div class="m serif">SN</div></div>
   <div class="prog" aria-hidden="true"></div>
   <div class="cur" aria-hidden="true"><div class="cdot"></div><div class="cring"><b><span>Play</span></b></div></div>
@@ -133,7 +139,7 @@ const jsonLd = {
         </svg>
         <b>SN</b>
       </div>
-      <div class="tag hi" data-depth="18">Promotional Video Editor</div>
+      <div class="tag hi" data-depth="18">{cfg.tagline}</div>
       <h1 class="serif" data-depth="12">Shirin Akter<br /><em>Nupur</em></h1>
       <p class="sub hi" data-depth="6">Brands don’t just need videos — they need stories that make people stop scrolling. I edit with a psychologist’s eye for what captures attention and drives action.</p>
       <a class="btn f hi" href="#work">View Work</a> <a class="btn hi" href="#contact">Hire Me</a>
@@ -216,28 +222,39 @@ const jsonLd = {
     <h2 class="serif">Visual <em>Concepts</em></h2>
     <p class="lead">Brand look &amp; packaging inspired design work</p>
     <div class="vis">
-      <figure data-speed="-.05">
-        <Image
-          src={asset('concept-1')}
-          alt="Green and gold Darjeeling tea pouch packaging artwork"
-          widths={[420, 840]}
-          sizes="(min-width: 560px) 45vw, 90vw"
-          loading="lazy"
-          format="webp"
-        />
-        <figcaption>Darjeeling pouch concept</figcaption>
-      </figure>
-      <figure data-speed=".07">
-        <Image
-          src={asset('concept-2')}
-          alt="Green and gold tea packaging artwork, framed label version"
-          widths={[420, 840]}
-          sizes="(min-width: 560px) 45vw, 90vw"
-          loading="lazy"
-          format="webp"
-        />
-        <figcaption>Framed label concept</figcaption>
-      </figure>
+      {cmsConcepts.length
+        ? cmsConcepts.map((c, i) => (
+            <figure data-speed={i % 2 ? '.07' : '-.05'}>
+              <img src={c.imageUrl} alt={c.alt} loading="lazy" width="840" />
+              <figcaption>{c.caption}</figcaption>
+            </figure>
+          ))
+        : (
+          <Fragment>
+            <figure data-speed="-.05">
+              <Image
+                src={asset('concept-1')}
+                alt="Green and gold Darjeeling tea pouch packaging artwork"
+                widths={[420, 840]}
+                sizes="(min-width: 560px) 45vw, 90vw"
+                loading="lazy"
+                format="webp"
+              />
+              <figcaption>Darjeeling pouch concept</figcaption>
+            </figure>
+            <figure data-speed=".07">
+              <Image
+                src={asset('concept-2')}
+                alt="Green and gold tea packaging artwork, framed label version"
+                widths={[420, 840]}
+                sizes="(min-width: 560px) 45vw, 90vw"
+                loading="lazy"
+                format="webp"
+              />
+              <figcaption>Framed label concept</figcaption>
+            </figure>
+          </Fragment>
+        )}
     </div>
   </div></section>
 
@@ -257,9 +274,9 @@ const jsonLd = {
     <h2 class="serif">Your brand deserves a <em>premium</em> video</h2>
     <p class="lead">Message me today and let’s make your next promo unforgettable.</p>
     <div class="row">
-      <a class="btn f" href={site.whatsapp}>{site.whatsappLabel}</a>
-      <a class="btn" href={site.facebook}>Facebook</a>
-      <a class="btn" href={site.facebookPage}>Facebook Page</a>
+      <a class="btn f" href={cfg.whatsapp}>{cfg.whatsappLabel}</a>
+      <a class="btn" href={cfg.facebook}>Facebook</a>
+      <a class="btn" href={cfg.facebookPage}>Facebook Page</a>
     </div>
   </div></section>
   <div class="perf"></div>
