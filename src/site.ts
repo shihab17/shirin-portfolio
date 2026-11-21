@@ -5,7 +5,9 @@ export const site = {
   description:
     'Shirin Akter Nupur is a promotional video editor with a psychology background. Story-led reels, ads, brand films and YouTube edits that make people stop scrolling.',
   tagline: 'Promotional Video Editor',
-  url: (import.meta.env.SITE as string) || 'https://shirin-nupur.pages.dev',
+  url:
+    (import.meta.env.SITE as string) ||
+    'https://shirin-portfolio.shihabahmed620.workers.dev',
   whatsapp: 'https://wa.me/8801880131455',
   whatsappLabel: 'WhatsApp · 01880131455',
   facebook: 'https://www.facebook.com/share/1En81SgCwC/',
