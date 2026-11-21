@@ -8,7 +8,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "gen:og": "node scripts/gen-og.mjs",
-    "gen:favicon": "node scripts/gen-favicon.mjs"
+    "gen:favicon": "node scripts/gen-favicon.mjs",
+    "studio": "sanity dev",
+    "studio:deploy": "sanity deploy"
   },
   "dependencies": {
     "@astrojs/react": "^7.0.1",
