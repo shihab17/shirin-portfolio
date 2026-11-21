@@ -146,10 +146,6 @@ const jsonLd = {
       <div class="reel-head"><div>
         <h2 class="serif">Selected <em>Work</em></h2>
         <p class="lead">A glimpse of my promotional and brand videos. Tap play on any project to watch. Full-length videos are shared on request.</p>
-      </div>
-      <div class="rnav">
-        <button class="rbtn" type="button" data-dir="-1" aria-label="Scroll to previous projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
-        <button class="rbtn" type="button" data-dir="1" aria-label="Scroll to next projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
       </div></div>
       <div class="filters" role="group" aria-label="Filter projects by category">
         <button class="chip act" type="button" data-cat="all">All<sup>{projects.length}</sup></button>
@@ -157,6 +153,8 @@ const jsonLd = {
           <button class="chip" type="button" data-cat={c}>{categoryLabel[c]}<sup>{catCounts[c]}</sup></button>
         ))}
       </div>
+      <div class="reel-wrap">
+        <button class="rnav l" type="button" data-dir="-1" aria-label="Scroll to previous projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
       <div class="reel">
         {projects.map((p) => (
           <VideoCard
@@ -170,6 +168,8 @@ const jsonLd = {
             category={p.category}
           />
         ))}
+      </div>
+        <button class="rnav r" type="button" data-dir="1" aria-label="Scroll to next projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
       </div>
     </div>
   </section>

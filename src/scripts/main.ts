@@ -155,13 +155,21 @@ import { animate, inView } from 'motion';
         if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
       }, true);
 
-      $$('.rbtn').forEach(function (b) {
+      $$('.rnav').forEach(function (b) {
         b.addEventListener('click', function () {
           var dir = parseFloat(b.getAttribute('data-dir') || '1');
           var step = ((cards[0] as HTMLElement).getBoundingClientRect().width || 300) + 20;
           reel!.scrollBy({ left: dir * step, behavior: 'smooth' });
         });
       });
+      var navL = $('.rnav.l'), navR = $('.rnav.r');
+      function navState() {
+        if (!navL || !navR || !reel) return;
+        navL.classList.toggle('off', reel.scrollLeft < 4);
+        navR.classList.toggle('off', reel.scrollLeft > reel.scrollWidth - reel.clientWidth - 4);
+      }
+      reel.addEventListener('scroll', navState);
+      navState();
     }
 
     /* ---------- category filter + center-focus ---------- */
@@ -203,7 +211,7 @@ import { animate, inView } from 'motion';
           if (!show) c.classList.remove('focus');
           if (show) vis.push(c);
         });
-        if (reel) reel.scrollLeft = 0;
+        if (reel) { reel.scrollLeft = 0; reel.dispatchEvent(new Event('scroll')); }
         focusHold = performance.now();
         vis.forEach(function (c, i) {
           animate(c, { opacity: [0, 1], transform: ['translateY(22px)', 'translateY(0px)'] }, { duration: 0.55, delay: i * 0.05, ease: ease });
