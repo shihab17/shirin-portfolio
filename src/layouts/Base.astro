@@ -1,0 +1,41 @@
+---
+import Seo from '../components/Seo.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  jsonLd?: Record<string, unknown>;
+}
+
+const { title, description, ogImage, jsonLd } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="manifest" href="/site.webmanifest" />
+<Seo title={title} description={description} ogImage={ogImage} />
+{jsonLd && (
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+)}
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap"
+  rel="stylesheet"
+/>
+<script is:inline>
+try {
+  if (sessionStorage.getItem('sn-seen')) document.documentElement.classList.add('seen');
+} catch (e) {}
+</script>
+</head>
+<body>
+<slot />
+</body>
+</html>

@@ -1,0 +1,38 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  kind: string;
+  chips: string[];
+  poster: string;
+  src: string;
+  description: string;
+}
+
+const { id, title, kind, chips, poster, src, description } = Astro.props;
+---
+
+<article class="vcard">
+  <div class="frame" style={`--poster:url(${poster})`}>
+    <video
+      id={`v${id}`}
+      src={src}
+      poster={poster}
+      preload="none"
+      playsinline
+      controls
+      controlslist="nodownload"
+      aria-label={`${title} — ${description}`}
+    ></video>
+    <button class="play" type="button" aria-label={`Play ${title}`}><span></span></button>
+    <i class="glare"></i>
+    <b class="num serif" aria-hidden="true">{id}</b>
+  </div>
+  <div class="meta">
+    <div>
+      <h3 class="serif">{title}</h3>
+      <p>{kind}</p>
+    </div>
+    <div class="chips">{chips.map((c) => <span>{c}</span>)}</div>
+  </div>
+</article>

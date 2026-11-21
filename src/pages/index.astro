@@ -1,0 +1,211 @@
+---
+import { Image, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Base from '../layouts/Base.astro';
+import VideoCard from '../components/VideoCard.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../site';
+import { projects, videoPoster, videoSrc } from '../data/projects';
+
+const assets = import.meta.glob<{ default: ImageMetadata }>('../assets/*.jpg', {
+  eager: true,
+});
+const asset = (name: string) => assets[`../assets/${name}.jpg`].default;
+
+const marqueeItems = [
+  ['Reels', 'reel'],
+  ['Brand Stories', 'story'],
+  ['Promo Edits', 'edit'],
+  ['Ads', 'ad'],
+  ['Color & Grade', 'color'],
+  ['Motion', 'motion'],
+  ['Sound Design', 'sound'],
+  ['YouTube', 'youtube'],
+] as const;
+
+// Optimized webp posters for every video card (also used for the blurred
+// frame background and the VideoObject thumbnailUrl).
+const posters: Record<string, string> = {};
+for (const p of projects) {
+  const opt = await getImage({ src: asset(videoPoster(p.id)), format: 'webp', width: 720 });
+  posters[p.id] = opt.src;
+}
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': `${site.url}/#person`,
+      name: site.name,
+      jobTitle: site.tagline,
+      description: site.description,
+      url: site.url,
+      image: new URL('/og-image.jpg', site.url).href,
+      knowsAbout: [
+        'Video Editing',
+        'Promotional Videos',
+        'Reels',
+        'Brand Films',
+        'Color Grading',
+        'Motion Graphics',
+        'Sound Design',
+      ],
+      sameAs: [site.facebook, site.facebookPage, site.whatsapp],
+    },
+    {
+      '@type': 'WebSite',
+      url: site.url,
+      name: `${site.name} — ${site.tagline}`,
+      description: site.description,
+      author: { '@id': `${site.url}/#person` },
+    },
+    {
+      '@type': 'ItemList',
+      name: 'Selected Work',
+      itemListElement: projects.map((p, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'VideoObject',
+          name: `${p.title} — ${p.kind}`,
+          description: p.description,
+          thumbnailUrl: new URL(posters[p.id], site.url).href,
+          contentUrl: new URL(videoSrc(p.id), site.url).href,
+          uploadDate: '2026-11-21',
+          duration: p.durationIso,
+          author: { '@id': `${site.url}/#person` },
+        },
+      })),
+    },
+  ],
+};
+---
+
+<Base jsonLd={jsonLd}>
+  <div class="curtain" aria-hidden="true"><i class="t"></i><i class="b"></i><div class="m serif">SN</div></div>
+  <div class="prog" aria-hidden="true"></div>
+  <div class="cur" aria-hidden="true"><div class="cdot"></div><div class="cring"><b><span>Play</span></b></div></div>
+  <nav class="nav" aria-label="Sections">
+    <a href="#about">About</a><a href="#work">Work</a><a href="#concepts">Concepts</a><a href="#contact">Hire</a>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="orb o1"></div><div class="orb o2"></div><div class="spot"></div>
+    <div class="wrap hero-in">
+      <div class="badge hi" data-depth="28">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <defs><path id="c" d="M60,60 m-47,0 a47,47 0 1,1 94,0 a47,47 0 1,1 -94,0"/></defs>
+          <text><textPath href="#c" textLength="290" lengthAdjust="spacing">Video Editor • Storyteller • Psychology •</textPath></text>
+        </svg>
+        <b>SN</b>
+      </div>
+      <div class="tag hi" data-depth="18">Promotional Video Editor</div>
+      <h1 class="serif" data-depth="12">Shirin Akter<br /><em>Nupur</em></h1>
+      <p class="sub hi" data-depth="6">Brands don’t just need videos — they need stories that make people stop scrolling. I edit with a psychologist’s eye for what captures attention and drives action.</p>
+      <a class="btn f hi" href="#work">View Work</a> <a class="btn hi" href="#contact">Hire Me</a>
+    </div>
+  </header>
+
+  <div class="perf"></div>
+  <div class="marq" aria-hidden="true"><div>
+    {[...marqueeItems, ...marqueeItems].map(([label, icon]) => (
+      <Fragment><span><Icon name={icon} />{label}</span><i>✦</i></Fragment>
+    ))}
+  </div></div>
+
+  <section id="about"><div class="wrap about">
+    <h2 class="serif">The Editor Behind <em>the Frame</em></h2>
+    <p class="lead">BSc in Psychology · Professional Promotional Video Editor</p>
+    <p>Understanding people is where great editing begins. My psychology background helps me shape pacing, emotion and visual rhythm so every promo feels premium and speaks directly to the viewer. Clients appreciate the quality of my work — and most of them come back for more.</p>
+    <div class="stats">
+      <div class="stat"><b>100%</b><span>Professional</span></div>
+      <div class="stat"><b>★</b><span>Loved by clients</span></div>
+      <div class="stat"><b>↻</b><span>Returning clients</span></div>
+    </div>
+  </div></section>
+
+  <section class="alt"><div class="wrap">
+    <h2 class="serif">Trusted <em>By</em></h2>
+    <p class="lead">Brands and businesses I have worked with</p>
+    <div class="brands"><span>Chonk</span><span>Home-made Baby Food by Jafrin</span><span>USA-based Website Client</span></div>
+  </div></section>
+
+  <section id="work">
+    <div class="ghost serif" data-hx="-.12" aria-hidden="true">Reels · Stories · Promos</div>
+    <div class="wrap">
+      <h2 class="serif">Selected <em>Work</em></h2>
+      <p class="lead">A glimpse of my promotional and brand videos. Tap play on any project to watch. Full-length videos are shared on request.</p>
+      <div class="reel">
+        {projects.map((p) => (
+          <VideoCard
+            id={p.id}
+            title={p.title}
+            kind={p.kind}
+            chips={p.chips}
+            poster={posters[p.id]}
+            src={videoSrc(p.id)}
+            description={p.description}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="alt" id="concepts"><div class="wrap">
+    <h2 class="serif">Visual <em>Concepts</em></h2>
+    <p class="lead">Brand look &amp; packaging inspired design work</p>
+    <div class="vis">
+      <figure data-speed="-.05">
+        <Image
+          src={asset('concept-1')}
+          alt="Green and gold Darjeeling tea pouch packaging artwork"
+          widths={[420, 840]}
+          sizes="(min-width: 560px) 45vw, 90vw"
+          loading="lazy"
+          format="webp"
+        />
+        <figcaption>Darjeeling pouch concept</figcaption>
+      </figure>
+      <figure data-speed=".07">
+        <Image
+          src={asset('concept-2')}
+          alt="Green and gold tea packaging artwork, framed label version"
+          widths={[420, 840]}
+          sizes="(min-width: 560px) 45vw, 90vw"
+          loading="lazy"
+          format="webp"
+        />
+        <figcaption>Framed label concept</figcaption>
+      </figure>
+    </div>
+  </div></section>
+
+  <section><div class="wrap">
+    <h2 class="serif">How I <em>Work</em></h2>
+    <p class="lead">Simple, smooth and on time</p>
+    <div class="steps">
+      <div class="step"><b>01</b><h3>Understand</h3><p>Your brand, audience and goal.</p></div>
+      <div class="step"><b>02</b><h3>Edit</h3><p>Story-led cuts, music, motion and color.</p></div>
+      <div class="step"><b>03</b><h3>Refine</h3><p>Feedback rounds until it feels perfect.</p></div>
+      <div class="step"><b>04</b><h3>Deliver</h3><p>Ready for Reels, Ads, YouTube and more.</p></div>
+    </div>
+  </div></section>
+
+  <section id="contact" class="contact"><div class="wrap">
+    <div class="tag">Let’s create together</div>
+    <h2 class="serif">Your brand deserves a <em>premium</em> video</h2>
+    <p class="lead">Message me today and let’s make your next promo unforgettable.</p>
+    <div class="row">
+      <a class="btn f" href={site.whatsapp}>{site.whatsappLabel}</a>
+      <a class="btn" href={site.facebook}>Facebook</a>
+      <a class="btn" href={site.facebookPage}>Facebook Page</a>
+    </div>
+  </div></section>
+  <div class="perf"></div>
+  <footer>© 2026 SHIRIN AKTER NUPUR</footer>
+
+  <script>
+    import '../scripts/main';
+  </script>
+</Base>

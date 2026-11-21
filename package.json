@@ -1,0 +1,17 @@
+{
+  "name": "shirin-nupur-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "gen:og": "node scripts/gen-og.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.6",
+    "astro": "^7.3.8",
+    "motion": "^14.14.0"
+  }
+}

@@ -1,0 +1,589 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Shirin Akter Nupur Portfolio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: midnight-emerald stage, champagne foil type, blush accent; videos in a numbered film-reel grid in the order given */
+:root{
+  --ink:#06100c; --deep:#0a1b15; --panel:#10281f; --gold:#e3c995; --gold-d:#b08d52;
+  --rose:#eab9a8; --ivory:#f7f0e1; --mut:#9db4a7; --line:rgba(227,201,149,.26);
+  --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --sans:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--ivory);font:300 16px/1.7 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.07;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.serif{font-family:var(--serif)}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+a:focus-visible,button:focus-visible,video:focus-visible{outline:2px solid var(--rose);outline-offset:3px}
+
+/* hero */
+.hero{position:relative;overflow:hidden;text-align:center;margin-top:calc(-1*env(safe-area-inset-top,0px));padding-top:calc(env(safe-area-inset-top,0px) + 64px);padding-bottom:64px;
+  background:radial-gradient(60% 70% at 50% -10%,#1b6a4f 0%,transparent 70%),radial-gradient(40% 50% at 100% 100%,rgba(234,185,168,.16),transparent 70%),radial-gradient(40% 50% at 0 90%,rgba(227,201,149,.10),transparent 70%),var(--ink)}
+.badge{width:118px;height:118px;margin:0 auto 22px;position:relative}
+.badge svg{width:100%;height:100%;animation:spin 28s linear infinite}
+.badge svg text{font:500 8px var(--sans);fill:var(--gold);text-transform:uppercase}
+.badge b{position:absolute;inset:0;display:grid;place-items:center;font:italic 500 30px var(--serif);color:var(--rose)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tag{letter-spacing:.38em;font-size:11px;color:var(--gold);text-transform:uppercase}
+h1{font-size:clamp(50px,13vw,112px);font-weight:500;line-height:.98;margin:16px 0 18px;letter-spacing:-.01em}
+h1 em{font-style:italic;background:linear-gradient(100deg,#f3dfb2 0%,#c9a15f 38%,#f0d6a6 62%,#e9b9a6 100%);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.06em}
+.sub{color:var(--mut);max-width:540px;margin:0 auto 32px;padding:0 4px}
+.btn{display:inline-block;padding:13px 30px;border:1px solid var(--gold);color:var(--gold);text-decoration:none;letter-spacing:.2em;font-size:12px;text-transform:uppercase;transition:.3s;margin:4px}
+.btn:hover,.btn.f{background:var(--gold);color:var(--ink)}
+.btn.f:hover{background:var(--rose);border-color:var(--rose)}
+
+/* film perforation band + marquee */
+.perf{height:16px;background:var(--deep);position:relative}
+.perf:before{content:"";position:absolute;inset:4px 0;background:repeating-linear-gradient(90deg,var(--line) 0 14px,transparent 14px 28px);border-radius:2px}
+.marq{overflow:hidden;border-bottom:1px solid var(--line);background:var(--deep);padding:14px 0;white-space:nowrap}
+.marq div{display:inline-block;animation:slide 38s linear infinite;font:italic 400 24px var(--serif);color:var(--gold)}
+.marq span{margin:0 22px}
+.marq i{font-style:normal;color:var(--rose);font-size:13px}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+section{padding-block:76px}
+section.alt{background:var(--deep)}
+h2{font-size:clamp(34px,7vw,54px);font-weight:500;line-height:1.1;color:var(--ivory);margin-bottom:10px;text-wrap:balance}
+h2 em{color:var(--gold);font-style:italic}
+.lead{color:var(--mut);margin-bottom:38px;max-width:60ch}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;text-align:center;margin-top:34px}
+.stat{border:1px solid var(--line);padding:28px 10px;background:linear-gradient(160deg,rgba(255,255,255,.03),transparent)}
+.stat b{display:block;font:500 38px var(--serif);color:var(--gold)}
+.stat span{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.about p{color:#dbe6de;max-width:68ch;font-size:17px}
+.brands{display:flex;flex-wrap:wrap;gap:12px}
+.brands span{border:1px solid var(--line);padding:10px 22px;font:500 21px var(--serif);color:var(--ivory);border-radius:40px}
+
+/* video reel */
+.reel{display:grid;gap:26px 22px;grid-template-columns:1fr;align-items:start}
+@media(min-width:620px){.reel{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:960px){.reel{grid-template-columns:repeat(3,1fr)}}
+.vcard{min-width:0}
+.frame{position:relative;aspect-ratio:4/5;max-width:100%;overflow:hidden;background:#000;border:1px solid var(--line);isolation:isolate}
+.frame:before{content:"";position:absolute;inset:-30px;background:var(--poster) center/cover;filter:blur(26px) brightness(.5) saturate(1.2);z-index:-1}
+.frame video{width:100%;height:100%;object-fit:contain;display:block;background:transparent}
+.frame:after{content:"";position:absolute;inset:7px;border:1px solid var(--line);pointer-events:none}
+.frame .num{position:absolute;left:16px;top:8px;font:italic 500 40px/1 var(--serif);color:var(--gold);text-shadow:0 2px 12px rgba(0,0,0,.7);pointer-events:none;z-index:2}
+.play{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px;border-radius:50%;border:1px solid var(--gold);background:rgba(6,16,12,.55);backdrop-filter:blur(6px);cursor:pointer;z-index:3;transition:.3s}
+.play span{position:absolute;left:25px;top:20px;border-left:18px solid var(--gold);border-top:12px solid transparent;border-bottom:12px solid transparent}
+.play:hover{background:var(--gold);transform:scale(1.08)}
+.play:hover span{border-left-color:var(--ink)}
+.frame.on .play{display:none}
+.frame:not(.on) video::-webkit-media-controls{display:none!important}
+.frame:not(.on) video{pointer-events:none}
+.meta{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding-top:12px;flex-wrap:wrap}
+.meta h3{font:500 22px/1.2 var(--serif);color:var(--ivory)}
+.meta p{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--rose)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips span{font-size:11px;letter-spacing:.06em;color:var(--mut);border:1px solid var(--line);padding:2px 10px;border-radius:20px;white-space:nowrap}
+
+/* visual concepts */
+.vis{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:30px;max-width:760px}
+.vis figure{position:relative;padding:10px;border:1px solid var(--line);background:var(--panel)}
+.vis figure:nth-child(2){margin-top:44px}
+.vis img{width:100%;display:block}
+.vis figcaption{font:italic 400 18px var(--serif);color:var(--gold);padding:10px 4px 2px}
+@media(max-width:560px){.vis figure:nth-child(2){margin-top:0}}
+
+.steps{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.step{border-top:1px solid var(--gold);padding-top:14px}
+.step b{font:italic 500 30px var(--serif);color:var(--rose)}
+.step h3{font:500 24px var(--serif);margin:2px 0 6px}
+.step p{color:var(--mut);font-size:14px}
+
+.contact{text-align:center;background:radial-gradient(60% 90% at 50% 0,#14513c 0%,transparent 70%),var(--deep)}
+.contact h2{margin:10px auto 0;max-width:16ch}
+.contact .lead{margin:10px auto 0}
+.contact .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+footer{text-align:center;padding:26px 16px calc(26px + env(safe-area-inset-bottom,0px));font-size:12px;color:var(--mut);letter-spacing:.2em;background:var(--ink)}
+@media(prefers-reduced-motion:reduce){.badge svg,.marq div{animation:none}html{scroll-behavior:auto}}
+
+/* ===== motion layer ===== */
+.js .hi,.js .rv{opacity:0}
+.js .hi.in,.js .rv.in,.js-off .hi,.js-off .rv{opacity:1}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding:0 .03em .16em;margin-bottom:-.16em}
+.wi{display:inline-block;will-change:transform}
+.split-on h1 em{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--gold);padding:0}
+.split-on h1 em .wi{background:linear-gradient(100deg,#f3dfb2 0%,#c9a15f 38%,#f0d6a6 62%,#e9b9a6 100%);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.08em}
+
+h2{position:relative;padding-bottom:16px}
+h2:after{content:"";position:absolute;left:0;bottom:0;width:84px;height:1px;background:linear-gradient(90deg,var(--gold),transparent);transform-origin:0 50%}
+.js h2:after{transform:scaleX(0);transition:transform 1.2s cubic-bezier(.22,1,.36,1) .45s}
+.js h2.in:after{transform:scaleX(1)}
+.contact h2:after{left:50%;margin-left:-42px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+
+/* page curtain */
+.curtain{position:fixed;inset:0;z-index:200;pointer-events:none;animation:cvh 0s linear 2.1s forwards}
+.curtain i{position:absolute;left:0;right:0;height:50.5%;background:linear-gradient(180deg,#0e3a2b,#06100c)}
+.curtain .t{top:0;animation:ctop .95s cubic-bezier(.76,0,.24,1) 1.05s forwards}
+.curtain .b{bottom:0;background:linear-gradient(0deg,#0e3a2b,#06100c);animation:cbot .95s cubic-bezier(.76,0,.24,1) 1.05s forwards}
+.curtain .m{position:absolute;inset:0;display:grid;place-items:center;font:italic 500 64px var(--serif);color:var(--gold);letter-spacing:.04em;animation:cin .7s ease both,cout .35s ease .8s forwards}
+@keyframes ctop{to{transform:translateY(-101%)}}
+@keyframes cbot{to{transform:translateY(101%)}}
+@keyframes cin{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
+@keyframes cout{to{opacity:0;transform:scale(1.06)}}
+@keyframes cvh{to{visibility:hidden}}
+
+/* progress + floating nav */
+.prog{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);height:3px;background:linear-gradient(90deg,var(--gold),var(--rose));transform-origin:0 50%;transform:scaleX(0);z-index:95}
+.nav{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:90;display:flex;gap:2px;padding:5px;border:1px solid var(--line);border-radius:40px;background:rgba(6,16,12,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transform:translate(-50%,-190%);transition:transform .7s cubic-bezier(.22,1,.36,1)}
+.nav.show{transform:translate(-50%,0)}
+.nav a{padding:7px 15px;border-radius:30px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mut);text-decoration:none;transition:background .3s,color .3s,translate .45s cubic-bezier(.22,1,.36,1)}
+.nav a:hover,.nav a.act{color:var(--ink);background:var(--gold)}
+@media(max-width:420px){.nav a{padding:7px 10px;letter-spacing:.1em}}
+
+/* hero atmosphere */
+.hero-in{position:relative;z-index:1}
+.orb{position:absolute;width:46vw;height:46vw;max-width:560px;max-height:560px;border-radius:50%;filter:blur(70px);opacity:.3;pointer-events:none;animation:drift 18s ease-in-out infinite alternate}
+.o1{left:-10vw;top:10%;background:radial-gradient(circle,#2a9a73,transparent 65%)}
+.o2{right:-12vw;bottom:-10%;background:radial-gradient(circle,var(--rose),transparent 65%);animation-duration:22s;animation-direction:alternate-reverse}
+@keyframes drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(7vw,-5vh,0) scale(1.18)}}
+.spot{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .6s;background:radial-gradient(420px circle at var(--mx,50%) var(--my,30%),rgba(227,201,149,.17),transparent 62%)}
+.hero:hover .spot{opacity:1}
+.sp{position:absolute;width:13px;height:13px;pointer-events:none;z-index:2;background:var(--gold);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)}
+.sp.rose{background:var(--rose);width:9px;height:9px}
+.js .marq div{animation:none;will-change:transform}
+
+/* ghost type behind the work section */
+#work{position:relative;overflow:hidden}
+#work .wrap{position:relative;z-index:1}
+.ghost{position:absolute;left:2vw;top:30px;white-space:nowrap;font:italic 500 clamp(120px,24vw,320px)/1 var(--serif);color:transparent;-webkit-text-stroke:1px rgba(227,201,149,.13);pointer-events:none;user-select:none}
+
+/* cards */
+.btn{transition:background .3s,color .3s,border-color .3s,translate .45s cubic-bezier(.22,1,.36,1)}
+.frame{transition:transform .6s cubic-bezier(.22,1,.36,1),box-shadow .5s,border-color .5s;will-change:transform}
+.vcard:hover .frame{border-color:var(--gold);box-shadow:0 34px 60px -26px rgba(0,0,0,.85),0 0 40px -10px rgba(227,201,149,.25)}
+.vcard h3{transition:color .3s}.vcard:hover h3{color:var(--gold)}
+.glare{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity .4s;background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,240,210,.24),transparent 55%)}
+.frame:hover .glare{opacity:1}.frame.on .glare{display:none}
+.vis figure{transition:border-color .4s}.vis figure:hover{border-color:var(--gold)}
+.vis img{transition:transform 1.2s cubic-bezier(.22,1,.36,1)}.vis figure:hover img{transform:scale(1.04)!important}
+.step{transition:border-color .4s}.step:hover{border-color:var(--rose)}
+.stat{transition:border-color .4s,transform .5s cubic-bezier(.22,1,.36,1)}.stat:hover{border-color:var(--gold)}
+
+/* custom cursor */
+.cur{display:none}
+.has-cursor .cur{display:block}
+.has-cursor,.has-cursor a,.has-cursor button,.has-cursor .frame,.has-cursor .frame video{cursor:none}
+.has-cursor .frame.on,.has-cursor .frame.on video,.has-cursor .frame.on *{cursor:auto}
+.cdot,.cring{position:fixed;left:0;top:0;pointer-events:none;z-index:300;opacity:0;transition:opacity .3s}
+.cdot{width:7px;height:7px;margin:-3.5px 0 0 -3.5px;border-radius:50%;background:var(--gold)}
+.cring b{position:absolute;left:0;top:0;width:38px;height:38px;border-radius:50%;border:1px solid var(--gold);transform:translate(-50%,-50%);display:grid;place-items:center;transition:width .4s cubic-bezier(.22,1,.36,1),height .4s cubic-bezier(.22,1,.36,1),background .3s,scale .25s}
+.cring span{font:500 10px var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--ink);opacity:0;transition:opacity .25s}
+.cur.vis .cdot,.cur.vis .cring{opacity:1}
+.cur.down .cring b{scale:.78}
+.cur[data-s=link] .cring b{width:64px;height:64px;background:rgba(227,201,149,.16)}
+.cur[data-s=play] .cring b{width:88px;height:88px;background:var(--gold)}
+.cur[data-s=play] .cring span{opacity:1}
+.cur[data-s=play] .cdot{opacity:0}
+.cur[data-s=native] .cdot,.cur[data-s=native] .cring{opacity:0}
+@media(prefers-reduced-motion:reduce){.curtain,.cur,.orb{display:none}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/motion@11.18.2/dist/motion.js"></script>
+<script>try{if(window.Motion&&!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('js')}catch(e){}</script>
+
+<div class="curtain" aria-hidden="true"><i class="t"></i><i class="b"></i><div class="m serif">SN</div></div>
+<div class="prog" aria-hidden="true"></div>
+<div class="cur" aria-hidden="true"><div class="cdot"></div><div class="cring"><b><span>Play</span></b></div></div>
+<nav class="nav" aria-label="Sections"><a href="#about">About</a><a href="#work">Work</a><a href="#concepts">Concepts</a><a href="#contact">Hire</a></nav>
+<header class="hero" id="top"><div class="orb o1"></div><div class="orb o2"></div><div class="spot"></div><div class="wrap hero-in">
+<div class="badge hi" data-depth="28"><svg viewBox="0 0 120 120" aria-hidden="true"><defs><path id="c" d="M60,60 m-47,0 a47,47 0 1,1 94,0 a47,47 0 1,1 -94,0"/></defs><text><textPath href="#c" textLength="290" lengthAdjust="spacing">Video Editor • Storyteller • Psychology •</textPath></text></svg><b>SN</b></div>
+<div class="tag hi" data-depth="18">Promotional Video Editor</div>
+<h1 class="serif" data-depth="12">Shirin Akter<br><em>Nupur</em></h1>
+<p class="sub hi" data-depth="6">Brands don’t just need videos — they need stories that make people stop scrolling. I edit with a psychologist’s eye for what captures attention and drives action.</p>
+<a class="btn f hi" href="#work">View Work</a> <a class="btn hi" href="#contact">Hire Me</a>
+</div></header>
+<div class="perf"></div>
+<div class="marq" aria-hidden="true"><div><span>Reels</span><i>✦</i><span>Brand Stories</span><i>✦</i><span>Promo Edits</span><i>✦</i><span>Ads</span><i>✦</i><span>Color & Grade</span><i>✦</i><span>Motion</span><i>✦</i><span>Sound Design</span><i>✦</i><span>YouTube</span><i>✦</i><span>Reels</span><i>✦</i><span>Brand Stories</span><i>✦</i><span>Promo Edits</span><i>✦</i><span>Ads</span><i>✦</i><span>Color & Grade</span><i>✦</i><span>Motion</span><i>✦</i><span>Sound Design</span><i>✦</i><span>YouTube</span><i>✦</i></div></div>
+
+<section id="about"><div class="wrap about">
+<h2 class="serif">The Editor Behind <em>the Frame</em></h2>
+<p class="lead">BSc in Psychology · Professional Promotional Video Editor</p>
+<p>Understanding people is where great editing begins. My psychology background helps me shape pacing, emotion and visual rhythm so every promo feels premium and speaks directly to the viewer. Clients appreciate the quality of my work — and most of them come back for more.</p>
+<div class="stats">
+<div class="stat"><b>100%</b><span>Professional</span></div>
+<div class="stat"><b>★</b><span>Loved by clients</span></div>
+<div class="stat"><b>↻</b><span>Returning clients</span></div></div>
+</div></section>
+
+<section class="alt"><div class="wrap">
+<h2 class="serif">Trusted <em>By</em></h2>
+<p class="lead">Brands and businesses I have worked with</p>
+<div class="brands"><span>Chonk</span><span>Home-made Baby Food by Jafrin</span><span>USA-based Website Client</span></div>
+</div></section>
+
+<section id="work"><div class="ghost serif" data-hx="-.12" aria-hidden="true">Reels · Stories · Promos</div><div class="wrap">
+<h2 class="serif">Selected <em>Work</em></h2>
+<p class="lead">A glimpse of my promotional and brand videos. Tap play on any project to watch. Full-length videos are shared on request.</p>
+<div class="reel">
+<article class="vcard">
+<div class="frame" style="--poster:url(img/poster-01.jpg)">
+<video id="v01" src="videos/01.mp4" poster="img/poster-01.jpg" preload="none" playsinline controls controlslist="nodownload" aria-label="Project 01 promo edit"></video>
+<button class="play" type="button" aria-label="Play project 01"><span></span></button>
+<i class="glare"></i>
+<b class="num serif" aria-hidden="true">01</b>
+</div>
+<div class="meta"><div><h3 class="serif">Project 01</h3><p>Promo Edit</p></div><div class="chips"><span>Vertical 9:16</span><span>1:22</span></div></div>
+</article>
+<article class="vcard">
+<div class="frame" style="--poster:url(img/poster-02.jpg)">
+<video id="v02" src="videos/02.mp4" poster="img/poster-02.jpg" preload="none" playsinline controls controlslist="nodownload" aria-label="Project 02 promo edit"></video>
+<button class="play" type="button" aria-label="Play project 02"><span></span></button>
+<i class="glare"></i>
+<b class="num serif" aria-hidden="true">02</b>
+</div>
+<div class="meta"><div><h3 class="serif">Project 02</h3><p>Promo Edit</p></div><div class="chips"><span>Vertical 9:16</span><span>0:44</span></div></div>
+</article>
+<article class="vcard">
+<div class="frame" style="--poster:url(img/poster-03.jpg)">
+<video id="v03" src="videos/03.mp4" poster="img/poster-03.jpg" preload="none" playsinline controls controlslist="nodownload" aria-label="Project 03 promo edit"></video>
+<button class="play" type="button" aria-label="Play project 03"><span></span></button>
+<i class="glare"></i>
+<b class="num serif" aria-hidden="true">03</b>
+</div>
+<div class="meta"><div><h3 class="serif">Project 03</h3><p>Promo Edit</p></div><div class="chips"><span>Vertical 9:16</span><span>0:29</span></div></div>
+</article>
+<article class="vcard">
+<div class="frame" style="--poster:url(img/poster-04.jpg)">
+<video id="v04" src="videos/04.mp4" poster="img/poster-04.jpg" preload="none" playsinline controls controlslist="nodownload" aria-label="Project 04 promo edit"></video>
+<button class="play" type="button" aria-label="Play project 04"><span></span></button>
+<i class="glare"></i>
+<b class="num serif" aria-hidden="true">04</b>
+</div>
+<div class="meta"><div><h3 class="serif">Project 04</h3><p>Promo Edit</p></div><div class="chips"><span>Landscape 16:9</span><span>1:14</span></div></div>
+</article>
+<article class="vcard">
+<div class="frame" style="--poster:url(img/poster-05.jpg)">
+<video id="v05" src="videos/05.mp4" poster="img/poster-05.jpg" preload="none" playsinline controls controlslist="nodownload" aria-label="Project 05 promo edit"></video>
+<button class="play" type="button" aria-label="Play project 05"><span></span></button>
+<i class="glare"></i>
+<b class="num serif" aria-hidden="true">05</b>
+</div>
+<div class="meta"><div><h3 class="serif">Project 05</h3><p>Promo Edit</p></div><div class="chips"><span>Landscape 16:9</span><span>1:54</span></div></div>
+</article>
+<article class="vcard">
+<div class="frame" style="--poster:url(img/poster-06.jpg)">
+<video id="v06" src="videos/06.mp4" poster="img/poster-06.jpg" preload="none" playsinline controls controlslist="nodownload" aria-label="Project 06 promo edit"></video>
+<button class="play" type="button" aria-label="Play project 06"><span></span></button>
+<i class="glare"></i>
+<b class="num serif" aria-hidden="true">06</b>
+</div>
+<div class="meta"><div><h3 class="serif">Project 06</h3><p>Promo Edit</p></div><div class="chips"><span>Vertical 9:16</span><span>1:28</span></div></div>
+</article>
+<article class="vcard">
+<div class="frame" style="--poster:url(img/poster-07.jpg)">
+<video id="v07" src="videos/07.mp4" poster="img/poster-07.jpg" preload="none" playsinline controls controlslist="nodownload" aria-label="Project 07 promo edit"></video>
+<button class="play" type="button" aria-label="Play project 07"><span></span></button>
+<i class="glare"></i>
+<b class="num serif" aria-hidden="true">07</b>
+</div>
+<div class="meta"><div><h3 class="serif">Project 07</h3><p>Promo Edit</p></div><div class="chips"><span>Square 1:1</span><span>6:28</span></div></div>
+</article>
+<article class="vcard">
+<div class="frame" style="--poster:url(img/poster-08.jpg)">
+<video id="v08" src="videos/08.mp4" poster="img/poster-08.jpg" preload="none" playsinline controls controlslist="nodownload" aria-label="Project 08 promo edit"></video>
+<button class="play" type="button" aria-label="Play project 08"><span></span></button>
+<i class="glare"></i>
+<b class="num serif" aria-hidden="true">08</b>
+</div>
+<div class="meta"><div><h3 class="serif">Project 08</h3><p>Promo Edit</p></div><div class="chips"><span>Vertical 9:16</span><span>2:10</span></div></div>
+</article>
+<article class="vcard">
+<div class="frame" style="--poster:url(img/poster-09.jpg)">
+<video id="v09" src="videos/09.mp4" poster="img/poster-09.jpg" preload="none" playsinline controls controlslist="nodownload" aria-label="Project 09 promo edit"></video>
+<button class="play" type="button" aria-label="Play project 09"><span></span></button>
+<i class="glare"></i>
+<b class="num serif" aria-hidden="true">09</b>
+</div>
+<div class="meta"><div><h3 class="serif">Project 09</h3><p>Promo Edit</p></div><div class="chips"><span>Vertical 9:16</span><span>1:01</span></div></div>
+</article>
+<article class="vcard">
+<div class="frame" style="--poster:url(img/poster-10.jpg)">
+<video id="v10" src="videos/10.mp4" poster="img/poster-10.jpg" preload="none" playsinline controls controlslist="nodownload" aria-label="Project 10 promo edit"></video>
+<button class="play" type="button" aria-label="Play project 10"><span></span></button>
+<i class="glare"></i>
+<b class="num serif" aria-hidden="true">10</b>
+</div>
+<div class="meta"><div><h3 class="serif">Project 10</h3><p>Promo Edit</p></div><div class="chips"><span>Vertical 9:16</span><span>0:27</span></div></div>
+</article>
+</div></div></section>
+
+<section class="alt" id="concepts"><div class="wrap">
+<h2 class="serif">Visual <em>Concepts</em></h2>
+<p class="lead">Brand look &amp; packaging inspired design work</p>
+<div class="vis">
+<figure data-speed="-.05"><img src="img/concept-1.jpg" alt="Green and gold Darjeeling tea pouch packaging artwork" loading="lazy" width="558" height="1000"><figcaption>Darjeeling pouch concept</figcaption></figure>
+<figure data-speed=".07"><img src="img/concept-2.jpg" alt="Green and gold tea packaging artwork, framed label version" loading="lazy" width="558" height="1000"><figcaption>Framed label concept</figcaption></figure>
+</div></div></section>
+
+<section><div class="wrap">
+<h2 class="serif">How I <em>Work</em></h2>
+<p class="lead">Simple, smooth and on time</p>
+<div class="steps">
+<div class="step"><b>01</b><h3>Understand</h3><p>Your brand, audience and goal.</p></div>
+<div class="step"><b>02</b><h3>Edit</h3><p>Story-led cuts, music, motion and color.</p></div>
+<div class="step"><b>03</b><h3>Refine</h3><p>Feedback rounds until it feels perfect.</p></div>
+<div class="step"><b>04</b><h3>Deliver</h3><p>Ready for Reels, Ads, YouTube and more.</p></div>
+</div></div></section>
+
+<section id="contact" class="contact"><div class="wrap">
+<div class="tag">Let’s create together</div>
+<h2 class="serif">Your brand deserves a <em>premium</em> video</h2>
+<p class="lead">Message me today and let’s make your next promo unforgettable.</p>
+<div class="row">
+<a class="btn f" href="https://wa.me/8801880131455">WhatsApp · 01880131455</a>
+<a class="btn" href="https://www.facebook.com/share/1En81SgCwC/">Facebook</a>
+<a class="btn" href="https://www.facebook.com/share/1JxU52z4sE/">Facebook Page</a>
+</div></div></section>
+<div class="perf"></div>
+<footer>© 2026 SHIRIN AKTER NUPUR</footer>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement, M = window.Motion;
+  function $$(s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); }
+  function $(s, c) { return (c || document).querySelector(s); }
+
+  /* ---------- video players (always on) ---------- */
+  (function () {
+    function stopOthers(except) { $$('.frame video').forEach(function (v) { if (v !== except) v.pause(); }); }
+    $$('.frame').forEach(function (f) {
+      var v = $('video', f), b = $('.play', f);
+      v.controls = false;
+      b.addEventListener('click', function () {
+        stopOthers(v); f.classList.add('on'); v.controls = true; f.style.transform = ''; v.play().catch(function () {});
+      });
+      v.addEventListener('play', function () { stopOthers(v); f.classList.add('on'); v.controls = true; });
+      v.addEventListener('ended', function () { f.classList.remove('on'); v.controls = false; });
+    });
+  })();
+
+  if (!M || !root.classList.contains('js')) return;
+  try { init(); } catch (e) { root.classList.add('js-off'); if (window.console) console.error(e); }
+
+  function init() {
+    var animate = M.animate, inView = M.inView;
+    var ease = [0.22, 1, 0.36, 1];
+    var fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+    /* ---------- helpers ---------- */
+    function splitWords(el) {
+      var out = [];
+      (function walk(node) {
+        Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+          if (n.nodeType === 3) {
+            var frag = document.createDocumentFragment();
+            n.textContent.split(/(\s+)/).forEach(function (t) {
+              if (!t) return;
+              if (/^\s+$/.test(t)) { frag.appendChild(document.createTextNode(' ')); return; }
+              var w = document.createElement('span'); w.className = 'w';
+              var i = document.createElement('span'); i.className = 'wi'; i.textContent = t;
+              w.appendChild(i); frag.appendChild(w); out.push(i);
+            });
+            n.parentNode.replaceChild(frag, n);
+          } else if (n.nodeType === 1 && n.tagName !== 'BR') { walk(n); }
+        });
+      })(el);
+      return out;
+    }
+    function reveal(el, delay, from, dur) {
+      if (el.__done) return; el.__done = 1;
+      var c = animate(el, { opacity: [0, 1], transform: [from || 'translateY(40px)', 'translateY(0px)'] },
+        { duration: dur || 0.95, delay: delay || 0, ease: ease });
+      c.then(function () { el.classList.add('in'); el.style.opacity = ''; el.style.transform = ''; });
+    }
+    function wordsUp(words, delay) {
+      words.forEach(function (w, i) {
+        animate(w, { transform: ['translateY(112%)', 'translateY(0%)'] }, { duration: 1.05, delay: delay + i * 0.09, ease: ease });
+      });
+    }
+
+    /* ---------- split headings ---------- */
+    $$('h1,h2').forEach(function (h) {
+      var w = splitWords(h);
+      w.forEach(function (i) { i.style.transform = 'translateY(112%)'; });
+      h.__w = w;
+    });
+    root.classList.add('split-on');
+
+    /* ---------- hero intro (after the curtain lifts) ---------- */
+    var d0 = 1.3;
+    wordsUp($('h1').__w, d0);
+    $$('.hi').forEach(function (el, i) { reveal(el, d0 + 0.25 + i * 0.12, 'translateY(28px)'); });
+    setTimeout(function () { // failsafe for the hero only
+      $$('.hi').forEach(function (el) { if (!el.classList.contains('in')) { el.classList.add('in'); el.style.opacity = ''; } });
+      $$('h1 .wi').forEach(function (w) { w.style.transform = 'translateY(0%)'; });
+    }, 4200);
+
+    /* ---------- scroll reveals ---------- */
+    $$('h2').forEach(function (h) {
+      inView(h, function () { wordsUp(h.__w, 0); h.classList.add('in'); }, { amount: 0.5 });
+    });
+    $$('.lead').forEach(function (el) { el.classList.add('rv'); inView(el, function () { reveal(el, 0.2, 'translateY(24px)'); }, { amount: 0.4 }); });
+    $$('.about > p:not(.lead)').forEach(function (el) { el.classList.add('rv'); inView(el, function () { reveal(el, 0.1); }, { amount: 0.3 }); });
+    [['.stats', '.stat', 'translateY(40px) scale(.92)'], ['.brands', 'span', 'translateY(24px) scale(.94)'],
+     ['.steps', '.step', 'translateY(44px)'], ['.contact .row', '.btn', 'translateY(30px)']].forEach(function (g) {
+      $$(g[0]).forEach(function (parent) {
+        var items = $$(g[1], parent);
+        items.forEach(function (it) { it.classList.add('rv'); });
+        inView(parent, function () { items.forEach(function (it, i) { reveal(it, i * 0.11, g[2]); }); }, { amount: 0.25 });
+      });
+    });
+    var ct = $('.contact .tag'); if (ct) { ct.classList.add('rv'); inView(ct, function () { reveal(ct, 0, 'translateY(20px)'); }, { amount: 0.6 }); }
+
+    var cards = $$('.vcard');
+    cards.forEach(function (c) { c.classList.add('rv'); });
+    cards.forEach(function (c, i) {
+      inView(c, function () {
+        var cols = getComputedStyle($('.reel')).gridTemplateColumns.split(' ').length || 1;
+        reveal(c, (i % cols) * 0.12, 'translateY(70px) scale(.95)', 1.05);
+      }, { amount: 0.15 });
+    });
+
+    $$('.vis figure').forEach(function (f) {
+      f.classList.add('rv');
+      inView(f, function () {
+        if (f.__done) return; f.__done = 1;
+        var c = animate(f, { opacity: [0, 1], clipPath: ['inset(0 0 100% 0)', 'inset(0 0 0% 0)'] }, { duration: 1.2, ease: ease });
+        c.then(function () { f.classList.add('in'); f.style.opacity = ''; f.style.clipPath = ''; });
+        var im = $('img', f); if (im) animate(im, { transform: ['scale(1.25)', 'scale(1)'] }, { duration: 1.6, ease: ease });
+      }, { amount: 0.2 });
+    });
+
+    /* ---------- nav pill + progress + parallax + marquee (one frame loop) ---------- */
+    var prog = $('.prog'), nav = $('.nav'), hero = $('.hero'), heroIn = $('.hero-in');
+    var parEls = $$('[data-speed],[data-hx]');
+    var marq = $('.marq div'), mpos = 0, mhalf = 0, sv = 0, dir = 1, lastY = window.scrollY, first = true;
+    function measure() { mhalf = marq ? marq.offsetWidth / 2 : 0; }
+    measure(); addEventListener('resize', measure); addEventListener('load', measure);
+
+    var tx = innerWidth / 2, ty = innerHeight / 2, rx = tx, ry = ty;
+    var cur = $('.cur'), cdot = $('.cdot'), cring = $('.cring');
+    var depthEls = $$('[data-depth]'), dS = depthEls.map(function () { return { x: 0, y: 0, tx: 0, ty: 0 }; });
+
+    function par(el, axisKey, k) {
+      var r = el.getBoundingClientRect();
+      var prev = el.__o || 0;
+      var base = axisKey === 'x' ? 0 : (r.top - prev);
+      var centre = axisKey === 'x' ? (r.top + r.height / 2 - innerHeight / 2) : (base + r.height / 2 - innerHeight / 2);
+      var off = centre * k;
+      el.__o = off;
+      el.style.translate = axisKey === 'x' ? off.toFixed(1) + 'px 0' : '0 ' + off.toFixed(1) + 'px';
+    }
+    function loop() {
+      var y = window.scrollY, raw = y - lastY; lastY = y;
+      sv += (raw - sv) * 0.12;
+      if (Math.abs(raw) > 0.5) dir = raw > 0 ? 1 : -1;
+
+      if (marq && mhalf) {
+        mpos -= (0.55 + Math.min(Math.abs(sv), 40) * 0.45) * dir;
+        if (mpos <= -mhalf) mpos += mhalf; if (mpos > 0) mpos -= mhalf;
+        marq.style.transform = 'translate3d(' + mpos.toFixed(2) + 'px,0,0)';
+      }
+      if (raw !== 0 || first) {
+        var max = root.scrollHeight - innerHeight;
+        prog.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, y / max) : 0).toFixed(4) + ')';
+        nav.classList.toggle('show', y > innerHeight * 0.55);
+        if (y < innerHeight * 1.2) {
+          heroIn.style.translate = '0 ' + (y * 0.2).toFixed(1) + 'px';
+          heroIn.style.opacity = Math.max(0, 1 - y / (innerHeight * 0.85)).toFixed(3);
+        }
+        parEls.forEach(function (el) {
+          if (el.hasAttribute('data-hx')) par(el, 'x', parseFloat(el.getAttribute('data-hx')));
+          else par(el, 'y', parseFloat(el.getAttribute('data-speed')));
+        });
+        first = false;
+      }
+      if (fine) {
+        rx += (tx - rx) * 0.16; ry += (ty - ry) * 0.16;
+        cdot.style.transform = 'translate3d(' + tx + 'px,' + ty + 'px,0)';
+        cring.style.transform = 'translate3d(' + rx.toFixed(1) + 'px,' + ry.toFixed(1) + 'px,0)';
+        depthEls.forEach(function (el, i) {
+          var s = dS[i]; s.x += (s.tx - s.x) * 0.07; s.y += (s.ty - s.y) * 0.07;
+          el.style.translate = s.x.toFixed(2) + 'px ' + s.y.toFixed(2) + 'px';
+        });
+      }
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+
+    /* active nav link */
+    var links = {};
+    $$('.nav a').forEach(function (a) { links[a.getAttribute('href').slice(1)] = a; });
+    ['about', 'work', 'concepts', 'contact'].forEach(function (id) {
+      var s = document.getElementById(id); if (!s) return;
+      inView(s, function () {
+        Object.keys(links).forEach(function (k) { links[k].classList.toggle('act', k === id); });
+        return function () { links[id] && links[id].classList.remove('act'); };
+      }, { amount: 0.3 });
+    });
+
+    /* ---------- mouse effects (fine pointers only) ---------- */
+    if (!fine) return;
+    root.classList.add('has-cursor');
+    addEventListener('pointermove', function (e) { tx = e.clientX; ty = e.clientY; cur.classList.add('vis'); }, { passive: true });
+    root.addEventListener('mouseleave', function () { cur.classList.remove('vis'); });
+    addEventListener('pointerdown', function () { cur.classList.add('down'); });
+    addEventListener('pointerup', function () { cur.classList.remove('down'); });
+    addEventListener('pointerover', function (e) {
+      var t = e.target, s = '';
+      if (t.closest('.frame.on')) s = 'native';
+      else if (t.closest('.frame')) s = 'play';
+      else if (t.closest('a,button')) s = 'link';
+      cur.setAttribute('data-s', s);
+    });
+
+    /* hero: spotlight, depth parallax, sparkle trail */
+    var spN = 0, lastSp = 0;
+    hero.addEventListener('pointermove', function (e) {
+      var r = hero.getBoundingClientRect();
+      hero.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      hero.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      var nx = (e.clientX / innerWidth - 0.5) * 2, ny = (e.clientY / innerHeight - 0.5) * 2;
+      depthEls.forEach(function (el, i) {
+        var d = parseFloat(el.getAttribute('data-depth'));
+        dS[i].tx = -nx * d; dS[i].ty = -ny * d * 0.6;
+      });
+      var now = performance.now();
+      if (now - lastSp < 50 || spN > 28) return; lastSp = now;
+      var s = document.createElement('i'); s.className = 'sp' + (Math.random() > 0.55 ? ' rose' : '');
+      s.style.left = (e.clientX - r.left) + 'px'; s.style.top = (e.clientY - r.top) + 'px';
+      hero.appendChild(s); spN++;
+      var dx = (Math.random() - 0.5) * 70, dy = 18 + Math.random() * 46;
+      animate(s, { opacity: [1, 0], transform: ['translate(-50%,-50%) scale(1) rotate(0deg)', 'translate(' + dx + 'px,' + dy + 'px) scale(0.2) rotate(90deg)'] },
+        { duration: 1.1, ease: 'easeOut' }).then(function () { s.remove(); spN--; });
+    });
+    hero.addEventListener('pointerleave', function () { dS.forEach(function (s) { s.tx = 0; s.ty = 0; }); });
+
+    /* magnetic buttons */
+    $$('.btn,.nav a').forEach(function (b) {
+      b.addEventListener('pointermove', function (e) {
+        var r = b.getBoundingClientRect();
+        b.style.translate = ((e.clientX - r.left - r.width / 2) * 0.3).toFixed(1) + 'px ' + ((e.clientY - r.top - r.height / 2) * 0.4).toFixed(1) + 'px';
+      });
+      b.addEventListener('pointerleave', function () { b.style.translate = '0px 0px'; });
+    });
+
+    /* 3D tilt + glare on video cards */
+    cards.forEach(function (c) {
+      var f = $('.frame', c);
+      c.addEventListener('pointermove', function (e) {
+        if (f.classList.contains('on')) { f.style.transform = ''; return; }
+        var r = f.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+        f.style.transform = 'perspective(900px) rotateX(' + ((0.5 - py) * 9).toFixed(2) + 'deg) rotateY(' + ((px - 0.5) * 11).toFixed(2) + 'deg) scale(1.025)';
+        f.style.setProperty('--gx', (px * 100).toFixed(1) + '%'); f.style.setProperty('--gy', (py * 100).toFixed(1) + '%');
+      });
+      c.addEventListener('pointerleave', function () { f.style.transform = ''; });
+    });
+  }
+})();
+
+</script>
+
+</body></html>
