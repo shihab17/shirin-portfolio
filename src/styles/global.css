@@ -83,7 +83,7 @@ h2 em{color:var(--gold);font-style:italic}
 .rnav.l{left:calc(50% - clamp(120px,15vw,170px) - 62px)}
 .rnav.r{right:calc(50% - clamp(120px,15vw,170px) - 62px)}
 .rnav.off{opacity:.22;pointer-events:none}
-@media(max-width:700px){.rnav{display:none}}
+@media(max-width:700px){.rnav{width:40px;height:40px;top:calc(50% - 54px)}.rnav.l{left:6px}.rnav.r{right:6px}.rnav svg{width:13px;height:13px}}
 
 /* category filter chips */
 .filters{display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:-16px 0 18px;padding:2px}

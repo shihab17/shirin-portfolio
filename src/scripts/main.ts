@@ -10,23 +10,22 @@ import { animate, inView } from 'motion';
     return (c || document).querySelector(s) as HTMLElement | null;
   }
 
+  function stopOthers(except: HTMLVideoElement | null) {
+    $$('.frame').forEach(function (fr: HTMLElement) {
+      var vv = fr.querySelector('video') as HTMLVideoElement | null;
+      if (!vv) return;
+      if (vv !== except) {
+        vv.pause();
+        (vv as any).__preview = false;
+        vv.controls = false;
+        fr.classList.remove('preview', 'on');
+      }
+    });
+  }
+
   /* ---------- video players (always on) ---------- */
   (function () {
     root.classList.add('js-video');
-    function stopOthers(except: HTMLVideoElement | null) {
-      $$('.frame').forEach(function (fr: HTMLElement) {
-        var vv = fr.querySelector('video') as HTMLVideoElement | null;
-        if (!vv) return;
-        if (vv !== except) {
-          vv.pause();
-          (vv as any).__preview = false;
-          vv.controls = false;
-          fr.classList.remove('preview', 'on');
-        } else {
-          fr.classList.remove('preview');
-        }
-      });
-    }
     function realPlay(f: HTMLElement, v: HTMLVideoElement) {
       stopOthers(v);
       (v as any).__preview = false; v.muted = false; v.loop = false;
@@ -321,6 +320,7 @@ import { animate, inView } from 'motion';
           if (lastFocus) lastFocus.classList.remove('focus');
           if (best) best.classList.add('focus');
           lastFocus = best;
+          stopOthers(best ? best.querySelector('video') : null);
           queuePreview(best);
         }
       }
