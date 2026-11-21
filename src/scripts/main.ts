@@ -158,7 +158,8 @@ import { animate, inView } from 'motion';
       $$('.rbtn').forEach(function (b) {
         b.addEventListener('click', function () {
           var dir = parseFloat(b.getAttribute('data-dir') || '1');
-          reel!.scrollBy({ left: dir * reel!.clientWidth * 0.75, behavior: 'smooth' });
+          var step = ((cards[0] as HTMLElement).getBoundingClientRect().width || 300) + 20;
+          reel!.scrollBy({ left: dir * step, behavior: 'smooth' });
         });
       });
     }
@@ -273,9 +274,9 @@ import { animate, inView } from 'motion';
           if (c.classList.contains('hide') || !c.classList.contains('in')) return;
           var cr = c.getBoundingClientRect();
           if (cr.right < rr.left || cr.left > rr.right) { c.style.opacity = ''; (c.style as any).scale = ''; return; }
-          var f = Math.max(0, 1 - Math.abs(cr.left + cr.width / 2 - mid) / (rr.width * 0.55));
-          c.style.opacity = (0.38 + 0.62 * f).toFixed(3);
-          (c.style as any).scale = (0.9 + 0.18 * f).toFixed(3);
+          var f = Math.max(0, 1 - Math.abs(cr.left + cr.width / 2 - mid) / (rr.width * 0.5));
+          c.style.opacity = (0.35 + 0.65 * f).toFixed(3);
+          (c.style as any).scale = (0.88 + 0.22 * f).toFixed(3);
           if (f > bestF) { bestF = f; best = c; }
         });
         if (lastFocus !== best) {
