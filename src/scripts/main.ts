@@ -12,20 +12,32 @@ import { animate, inView } from 'motion';
 
   /* ---------- video players (always on) ---------- */
   (function () {
-    function stopOthers(except: HTMLVideoElement) {
-      $$('.frame video').forEach(function (v: HTMLVideoElement) {
-        if (v !== except) v.pause();
+    function stopOthers(except: HTMLVideoElement | null) {
+      $$('.frame').forEach(function (fr: HTMLElement) {
+        var vv = fr.querySelector('video');
+        if (vv !== except) { vv && vv.pause(); fr.classList.remove('preview'); }
       });
+    }
+    function realPlay(f: HTMLElement, v: HTMLVideoElement) {
+      stopOthers(v);
+      (v as any).__preview = false; v.muted = false; v.loop = false;
+      f.classList.remove('preview'); f.classList.add('on');
+      v.controls = true; f.style.transform = '';
+      v.play().catch(function () {});
     }
     $$('.frame').forEach(function (f: HTMLElement) {
       var v = $('video', f) as HTMLVideoElement | null;
       var b = $('.play', f);
       if (!v || !b) return;
       v.controls = false;
-      b.addEventListener('click', function () {
-        stopOthers(v); f.classList.add('on'); v.controls = true; f.style.transform = ''; v.play().catch(function () {});
+      b.addEventListener('click', function () { realPlay(f, v); });
+      f.addEventListener('click', function () {
+        if (f.classList.contains('preview')) realPlay(f, v);
       });
-      v.addEventListener('play', function () { stopOthers(v); f.classList.add('on'); v.controls = true; });
+      v.addEventListener('play', function () {
+        if ((v as any).__preview) return;
+        stopOthers(v); f.classList.add('on'); v.controls = true;
+      });
       v.addEventListener('ended', function () { f.classList.remove('on'); v.controls = false; });
     });
   })();
@@ -154,6 +166,30 @@ import { animate, inView } from 'motion';
     /* ---------- category filter + center-focus ---------- */
     var lastFocus: HTMLElement | null = null;
     var focusHold = 0;
+    var pvCard: HTMLElement | null = null;
+    var pvTimer = 0;
+
+    /* muted autoplay preview on the focused card (Netflix-style) */
+    function queuePreview(c: HTMLElement | null) {
+      if (pvCard === c) return;
+      clearTimeout(pvTimer);
+      if (pvCard) {
+        var of = pvCard.querySelector('.frame');
+        var ov = pvCard.querySelector('video') as HTMLVideoElement | null;
+        if (of && ov && !of.classList.contains('on')) ov.pause();
+        of && of.classList.remove('preview');
+        pvCard = null;
+      }
+      if (!c) return;
+      pvTimer = window.setTimeout(function () {
+        var f = c.querySelector('.frame') as HTMLElement | null;
+        var v = c.querySelector('video') as HTMLVideoElement | null;
+        if (!f || !v || f.classList.contains('on') || c.classList.contains('hide')) return;
+        pvCard = c;
+        (v as any).__preview = true; v.muted = true; v.loop = true;
+        v.play().then(function () { f.classList.add('preview'); }).catch(function () { (v as any).__preview = false; pvCard = null; });
+      }, 700);
+    }
     $$('.chip').forEach(function (chip) {
       chip.addEventListener('click', function () {
         $$('.chip').forEach(function (c) { c.classList.toggle('act', c === chip); });
@@ -238,14 +274,15 @@ import { animate, inView } from 'motion';
           var cr = c.getBoundingClientRect();
           if (cr.right < rr.left || cr.left > rr.right) { c.style.opacity = ''; (c.style as any).scale = ''; return; }
           var f = Math.max(0, 1 - Math.abs(cr.left + cr.width / 2 - mid) / (rr.width * 0.55));
-          c.style.opacity = (0.55 + 0.45 * f).toFixed(3);
-          (c.style as any).scale = (0.965 + 0.05 * f).toFixed(3);
+          c.style.opacity = (0.45 + 0.55 * f).toFixed(3);
+          (c.style as any).scale = (0.93 + 0.12 * f).toFixed(3);
           if (f > bestF) { bestF = f; best = c; }
         });
         if (lastFocus !== best) {
           if (lastFocus) lastFocus.classList.remove('focus');
           if (best) best.classList.add('focus');
           lastFocus = best;
+          queuePreview(best);
         }
       }
 

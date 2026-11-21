@@ -79,6 +79,8 @@ h2 em{color:var(--gold);font-style:italic}
 .chip.act sup{color:var(--ink)}
 .vcard.hide{display:none}
 .vcard.focus .frame{border-color:var(--gold);box-shadow:0 30px 55px -24px rgba(0,0,0,.85),0 0 46px -8px rgba(227,201,149,.38)}
+.frame.preview .play{display:none}
+.frame.preview{cursor:pointer}
 .frame{position:relative;aspect-ratio:4/5;max-width:100%;overflow:hidden;background:#000;border:1px solid var(--line);isolation:isolate}
 .frame:before{content:"";position:absolute;inset:-30px;background:var(--poster) center/cover;filter:blur(26px) brightness(.5) saturate(1.2);z-index:-1}
 .frame video{width:100%;height:100%;object-fit:contain;display:block;background:transparent}
