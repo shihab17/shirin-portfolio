@@ -6,6 +6,7 @@ export interface Brand {
   monogram: string;
   service?: string;
   link?: string;
+  logoUrl?: string;
 }
 
 export const brands: Brand[] = [

@@ -68,6 +68,7 @@ a.brand:hover,span.brand:hover{transform:translateY(-3px);border-color:var(--gol
 .bmark{display:grid;place-items:center;width:52px;height:52px;flex:none;border-radius:50%;
   border:1px solid var(--gold);color:var(--gold);font-size:26px;
   background:radial-gradient(circle at 30% 30%,rgba(212,175,55,.18),transparent 70%)}
+.blogo{object-fit:contain;padding:8px;border-radius:14px}
 .binfo b{display:block;font:500 19px var(--serif);color:var(--ivory);line-height:1.25}
 .binfo i{display:block;font-style:normal;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-top:5px}
 

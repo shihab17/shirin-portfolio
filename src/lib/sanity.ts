@@ -52,10 +52,11 @@ export interface CmsBrand {
   monogram: string;
   service?: string;
   link?: string;
+  logoUrl?: string;
 }
 
 const BRANDS_QUERY = `*[_type == "brand"] | order(order asc, _createdAt asc) {
-  name, monogram, service, link
+  name, monogram, service, link, logo
 }`;
 
 export async function fetchBrands(): Promise<CmsBrand[]> {
@@ -67,6 +68,9 @@ export async function fetchBrands(): Promise<CmsBrand[]> {
       monogram: (d.monogram || (d.name || '?')[0]).toUpperCase(),
       service: d.service || undefined,
       link: d.link || undefined,
+      logoUrl: d.logo
+        ? builder.image(d.logo).height(96).auto('format').url()
+        : undefined,
     }));
   } catch (e) {
     console.warn('[sanity] fetchBrands failed, using local data:', e);

@@ -165,7 +165,9 @@ const jsonLd = {
       {brands.map((b) => {
         const inner = (
           <Fragment>
-            <span class="bmark serif" aria-hidden="true">{b.monogram}</span>
+            {'logoUrl' in b && b.logoUrl
+              ? <img class="bmark blogo" src={b.logoUrl} alt="" loading="lazy" />
+              : <span class="bmark serif" aria-hidden="true">{b.monogram}</span>}
             <span class="binfo"><b>{b.name}</b>{b.service && <i>{b.service}</i>}</span>
           </Fragment>
         );

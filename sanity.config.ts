@@ -85,10 +85,16 @@ const brand = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
+      name: 'logo',
+      title: 'Logo image',
+      type: 'image',
+      description: 'Brand logo — PNG/SVG with transparent background works best. Shown instead of the monogram when set.',
+    }),
+    defineField({
       name: 'monogram',
       title: 'Monogram letters',
       type: 'string',
-      description: '1–2 letters shown in the badge, e.g. "C". Leave empty to use the first letter of the name.',
+      description: '1–2 letters shown in the badge, e.g. "C". Fallback when no logo image is set.',
     }),
     defineField({
       name: 'service',
