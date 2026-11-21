@@ -10,9 +10,10 @@ interface Props {
   src: string;
   description: string;
   category: Category;
+  href?: string;
 }
 
-const { id, title, kind, chips, poster, src, description, category } = Astro.props;
+const { id, title, kind, chips, poster, src, description, category, href } = Astro.props;
 ---
 
 <article class="vcard" data-cat={category}>
@@ -34,7 +35,7 @@ const { id, title, kind, chips, poster, src, description, category } = Astro.pro
   </div>
   <div class="meta">
     <div>
-      <h3 class="serif">{title}</h3>
+      <h3 class="serif">{href ? <a class="tlink" href={href}>{title}</a> : title}</h3>
       <p>{kind}</p>
     </div>
     <div class="chips">{chips.map((c) => <span>{c}</span>)}</div>

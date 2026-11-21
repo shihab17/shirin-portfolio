@@ -5,7 +5,7 @@ import Base from '../layouts/Base.astro';
 import VideoCard from '../components/VideoCard.astro';
 import Icon from '../components/Icon.astro';
 import { site } from '../site';
-import { projects as localProjects, videoPoster, videoSrc, categoryLabel, featuredId } from '../data/projects';
+import { projects as localProjects, videoPoster, videoSrc, categoryLabel, featuredId, projectSlug } from '../data/projects';
 import type { Category } from '../data/projects';
 import { fetchProjects, fetchBrands, fetchConcepts, fetchSiteSettings } from '../lib/sanity';
 import { brands as localBrands } from '../data/brands';
@@ -210,6 +210,7 @@ const jsonLd = {
             src={srcs[p.id]}
             description={p.description}
             category={p.category}
+            href={`/work/${projectSlug(p)}`}
           />
         ))}
       </div>

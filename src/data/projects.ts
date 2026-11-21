@@ -121,5 +121,15 @@ export const projects: Project[] = [
 export const videoPoster = (id: string) => `poster-${id}`;
 export const videoSrc = (id: string) => `/videos/${id}.mp4`;
 
+// "Tea Garden — Brand Film" → "tea-garden-brand-film"
+export const slugify = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+export const projectSlug = (p: { slug?: string; title: string }) =>
+  p.slug || slugify(p.title);
+
 // Project used for the hero's ambient background clip.
 export const featuredId = '03';

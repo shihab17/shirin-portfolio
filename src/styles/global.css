@@ -131,6 +131,8 @@ a.brand:hover,span.brand:hover{transform:translateY(-3px);border-color:var(--gol
 .js-video .frame.on .play{display:none}
 .meta{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding-top:12px;flex-wrap:wrap}
 .meta h3{font:500 22px/1.2 var(--serif);color:var(--ivory)}
+.meta h3 .tlink{color:inherit;text-decoration:none}
+.meta h3 .tlink:hover{color:var(--gold)}
 .meta p{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--rose)}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
 .chips span{font-size:11px;letter-spacing:.06em;color:var(--mut);border:1px solid var(--line);padding:2px 10px;border-radius:20px;white-space:nowrap}
@@ -237,3 +239,22 @@ h2:after{content:"";position:absolute;left:0;bottom:0;width:84px;height:1px;back
 .cur[data-s=play] .cdot{opacity:0}
 .cur[data-s=native] .cdot,.cur[data-s=native] .cring{opacity:0}
 @media(prefers-reduced-motion:reduce){.curtain,.cur,.orb{display:none}}
+
+/* ——— work detail page ——— */
+.wpage{min-height:100vh;padding:56px 0 90px}
+.wback{display:inline-block;color:var(--mut);text-decoration:none;font-size:12px;letter-spacing:.18em;
+  text-transform:uppercase;margin-bottom:34px;transition:color .3s}
+.wback:hover{color:var(--gold)}
+.wpage h1{font-size:clamp(32px,5.4vw,56px);line-height:1.1;margin:16px 0 20px}
+.wpage .chips{margin-bottom:8px}
+.wframe{position:relative;overflow:hidden;background:#000;border:1px solid var(--line);
+  isolation:isolate;margin-top:36px;display:flex;justify-content:center}
+.wframe:before{content:"";position:absolute;inset:-30px;background:var(--poster) center/cover;
+  filter:blur(26px) brightness(.5) saturate(1.2);z-index:-1}
+.wframe video{display:block;max-width:100%;max-height:78vh}
+.wdesc{max-width:62ch;margin:30px auto 0;color:#dbe6de;font-size:17px;text-align:center}
+.wpnav{display:flex;justify-content:space-between;gap:14px;margin-top:52px;flex-wrap:wrap}
+.wpnav a{color:var(--ivory);text-decoration:none;border:1px solid var(--line);padding:11px 22px;
+  border-radius:30px;font:500 14px var(--serif);transition:border-color .3s,color .3s;max-width:48%;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wpnav a:hover{border-color:var(--gold);color:var(--gold)}

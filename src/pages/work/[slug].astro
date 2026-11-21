@@ -1,0 +1,117 @@
+---
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Base from '../../layouts/Base.astro';
+import { site } from '../../site';
+import {
+  projects as localProjects,
+  videoPoster,
+  videoSrc,
+  categoryLabel,
+  projectSlug,
+} from '../../data/projects';
+import { fetchProjects } from '../../lib/sanity';
+import type { CmsProject } from '../../lib/sanity';
+
+export async function getStaticPaths() {
+  const cms = await fetchProjects();
+  const list = cms.length ? cms : localProjects;
+  const assets = import.meta.glob<{ default: ImageMetadata }>('../../assets/*.jpg', {
+    eager: true,
+  });
+  const localPoster = (id: string) => {
+    const mod = assets[`../../assets/${videoPoster(id)}.jpg`];
+    if (!mod) throw new Error(`Missing image asset: src/assets/${videoPoster(id)}.jpg`);
+    return mod.default;
+  };
+
+  const paths = [];
+  for (let i = 0; i < list.length; i++) {
+    const p = list[i] as CmsProject;
+    const poster = p.posterUrl
+      ? p.posterUrl
+      : (await getImage({ src: localPoster(p.id), format: 'webp', width: 1080 })).src;
+    const src = p.videoUrl ?? videoSrc(p.id);
+    // OG card: Sanity crops server-side to 1200x630; local falls back
+    // to the site-wide OG image.
+    const ogImage = p.posterOgUrl ?? '/og-image.jpg';
+    const mkNav = (q: CmsProject | undefined) =>
+      q ? { slug: projectSlug(q), title: q.title } : null;
+    paths.push({
+      params: { slug: projectSlug(p) },
+      props: { p, poster, src, ogImage, prev: mkNav(list[i - 1]), next: mkNav(list[i + 1]) },
+    });
+  }
+  return paths;
+}
+
+interface Props {
+  p: CmsProject;
+  poster: string;
+  src: string;
+  ogImage: string;
+  prev: { slug: string; title: string } | null;
+  next: { slug: string; title: string } | null;
+}
+
+const { p, poster, src, ogImage, prev, next } = Astro.props;
+const pageUrl = new URL(`/work/${projectSlug(p)}`, site.url).href;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'VideoObject',
+      name: `${p.title} — ${p.kind}`,
+      description: p.description,
+      thumbnailUrl: new URL(poster, site.url).href,
+      contentUrl: new URL(src, site.url).href,
+      url: pageUrl,
+      uploadDate: p.uploadDate || '2026-11-21',
+      duration: p.durationIso,
+      genre: categoryLabel[p.category],
+      author: { '@id': `${site.url}/#person` },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+        { '@type': 'ListItem', position: 2, name: 'Work', item: `${site.url}/#work` },
+        { '@type': 'ListItem', position: 3, name: p.title, item: pageUrl },
+      ],
+    },
+  ],
+};
+---
+
+<Base
+  title={`${p.title} — ${site.name}`}
+  description={p.description}
+  ogImage={ogImage}
+  jsonLd={jsonLd}
+>
+  <main class="wpage">
+    <div class="wrap">
+      <a class="wback" href="/#work">← All work</a>
+      <p class="tag">{p.kind} · {categoryLabel[p.category]}</p>
+      <h1 class="serif">{p.title}</h1>
+      <div class="chips">{p.chips.map((c) => <span>{c}</span>)}</div>
+      <div class="wframe" style={`--poster:url("${poster}")`}>
+        <video
+          src={src}
+          poster={poster}
+          controls
+          playsinline
+          preload="metadata"
+          controlslist="nodownload"
+          aria-label={`${p.title} — ${p.description}`}
+        ></video>
+      </div>
+      <p class="wdesc">{p.description}</p>
+      <nav class="wpnav" aria-label="More work">
+        {prev ? <a href={`/work/${prev.slug}`}>← {prev.title}</a> : <span></span>}
+        {next ? <a href={`/work/${next.slug}`}>{next.title} →</a> : <span></span>}
+      </nav>
+    </div>
+  </main>
+</Base>

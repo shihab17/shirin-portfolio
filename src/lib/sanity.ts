@@ -15,13 +15,15 @@ const builder = createImageUrlBuilder(sanityClient);
 export interface CmsProject extends Project {
   uploadDate?: string;
   posterUrl?: string;
+  posterOgUrl?: string;
   videoUrl?: string;
   featured?: boolean;
+  slug?: string;
 }
 
 const QUERY = `*[_type == "project"] | order(order asc, _createdAt asc) {
   id, order, title, kind, chips, category, description, durationIso, uploadDate,
-  featured, poster, "videoUrl": video.asset->url
+  featured, poster, "videoUrl": video.asset->url, "slug": slug.current
 }`;
 
 export async function fetchProjects(): Promise<CmsProject[]> {
@@ -38,8 +40,12 @@ export async function fetchProjects(): Promise<CmsProject[]> {
       durationIso: d.durationIso || '',
       uploadDate: d.uploadDate,
       featured: !!d.featured,
+      slug: d.slug || undefined,
       posterUrl: d.poster
         ? builder.image(d.poster).width(720).auto('format').url()
+        : undefined,
+      posterOgUrl: d.poster
+        ? builder.image(d.poster).width(1200).height(630).fit('crop').auto('format').url()
         : undefined,
       videoUrl: d.videoUrl || undefined,
     }));

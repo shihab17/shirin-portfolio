@@ -72,6 +72,13 @@ const project = defineType({
       description: 'Tick on ONE project — its poster is used behind the hero',
       initialValue: false,
     }),
+    defineField({
+      name: 'slug',
+      type: 'slug',
+      options: { source: 'title', maxLength: 96 },
+      description: 'Used in the project page URL — click Generate',
+      validation: (r) => r.required(),
+    }),
   ],
   preview: {
     select: { title: 'title', subtitle: 'kind', media: 'poster' },
