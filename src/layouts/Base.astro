@@ -34,6 +34,9 @@ try {
   if (sessionStorage.getItem('sn-seen')) document.documentElement.classList.add('seen');
 } catch (e) {}
 </script>
+<!-- Cloudflare Web Analytics -->
+<script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "df41581cdfe14e1e9d730b2470555c58"}'></script>
+<!-- End Cloudflare Web Analytics -->
 </head>
 <body>
 <slot />
