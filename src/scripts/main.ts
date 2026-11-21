@@ -108,13 +108,70 @@ import { animate, inView } from 'motion';
     var ct = $('.contact .tag'); if (ct) { ct.classList.add('rv'); inView(ct, function () { reveal(ct, 0, 'translateY(20px)'); }, { amount: 0.6 }); }
 
     var cards = $$('.vcard');
+    var reel = $('.reel') as HTMLElement | null;
     cards.forEach(function (c) { c.classList.add('rv'); });
     cards.forEach(function (c, i) {
       inView(c, function () {
-        var reel = $('.reel');
-        var cols = reel ? getComputedStyle(reel).gridTemplateColumns.split(' ').length : 1;
-        reveal(c, (i % (cols || 1)) * 0.12, 'translateY(70px) scale(.95)', 1.05);
+        var w = (c as HTMLElement).getBoundingClientRect().width || 1;
+        var cols = reel ? Math.max(1, Math.round(reel.clientWidth / w)) : 1;
+        reveal(c, (i % cols) * 0.12, 'translateY(70px) scale(.95)', 1.05);
       }, { amount: 0.15 });
+    });
+
+    /* ---------- horizontal reel: wheel, drag, arrows ---------- */
+    if (reel) {
+      reel.addEventListener('wheel', function (e: WheelEvent) {
+        if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+        var canL = reel!.scrollLeft > 0;
+        var canR = reel!.scrollLeft + reel!.clientWidth < reel!.scrollWidth - 1;
+        if ((e.deltaY < 0 && canL) || (e.deltaY > 0 && canR)) {
+          reel!.scrollLeft += e.deltaY;
+          e.preventDefault();
+        }
+      }, { passive: false });
+
+      var down = false, startX = 0, startL = 0, moved = false;
+      reel.addEventListener('pointerdown', function (e) { down = true; moved = false; startX = e.clientX; startL = reel!.scrollLeft; });
+      addEventListener('pointermove', function (e) {
+        if (!down) return;
+        var dx = e.clientX - startX;
+        if (Math.abs(dx) > 4) { moved = true; reel!.classList.add('drag'); }
+        reel!.scrollLeft = startL - dx;
+      });
+      addEventListener('pointerup', function () { down = false; setTimeout(function () { reel!.classList.remove('drag'); }, 0); });
+      reel.addEventListener('click', function (e) {
+        if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+      }, true);
+
+      $$('.rbtn').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var dir = parseFloat(b.getAttribute('data-dir') || '1');
+          reel!.scrollBy({ left: dir * reel!.clientWidth * 0.75, behavior: 'smooth' });
+        });
+      });
+    }
+
+    /* ---------- category filter + center-focus ---------- */
+    var lastFocus: HTMLElement | null = null;
+    var focusHold = 0;
+    $$('.chip').forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        $$('.chip').forEach(function (c) { c.classList.toggle('act', c === chip); });
+        var cat = chip.getAttribute('data-cat');
+        var vis: HTMLElement[] = [];
+        cards.forEach(function (c: HTMLElement) {
+          var show = cat === 'all' || c.getAttribute('data-cat') === cat;
+          c.classList.toggle('hide', !show);
+          c.style.opacity = ''; (c.style as any).scale = '';
+          if (!show) c.classList.remove('focus');
+          if (show) vis.push(c);
+        });
+        if (reel) reel.scrollLeft = 0;
+        focusHold = performance.now();
+        vis.forEach(function (c, i) {
+          animate(c, { opacity: [0, 1], transform: ['translateY(22px)', 'translateY(0px)'] }, { duration: 0.55, delay: i * 0.05, ease: ease });
+        });
+      });
     });
 
     $$('.vis figure').forEach(function (f: any) {
@@ -171,6 +228,27 @@ import { animate, inView } from 'motion';
         });
         first = false;
       }
+      /* center-focus: nearest card pops, others dim */
+      if (reel && performance.now() - focusHold > 650) {
+        var rr = reel.getBoundingClientRect();
+        var mid = rr.left + rr.width / 2;
+        var best: HTMLElement | null = null, bestF = 0;
+        cards.forEach(function (c: HTMLElement) {
+          if (c.classList.contains('hide') || !c.classList.contains('in')) return;
+          var cr = c.getBoundingClientRect();
+          if (cr.right < rr.left || cr.left > rr.right) { c.style.opacity = ''; (c.style as any).scale = ''; return; }
+          var f = Math.max(0, 1 - Math.abs(cr.left + cr.width / 2 - mid) / (rr.width * 0.55));
+          c.style.opacity = (0.55 + 0.45 * f).toFixed(3);
+          (c.style as any).scale = (0.965 + 0.05 * f).toFixed(3);
+          if (f > bestF) { bestF = f; best = c; }
+        });
+        if (lastFocus !== best) {
+          if (lastFocus) lastFocus.classList.remove('focus');
+          if (best) best.classList.add('focus');
+          lastFocus = best;
+        }
+      }
+
       if (fine && cdot && cring) {
         rx += (tx - rx) * 0.16; ry += (ty - ry) * 0.16;
         cdot.style.transform = 'translate3d(' + tx + 'px,' + ty + 'px,0)';

@@ -7,12 +7,13 @@ interface Props {
   poster: string;
   src: string;
   description: string;
+  category: string;
 }
 
-const { id, title, kind, chips, poster, src, description } = Astro.props;
+const { id, title, kind, chips, poster, src, description, category } = Astro.props;
 ---
 
-<article class="vcard">
+<article class="vcard" data-cat={category}>
   <div class="frame" style={`--poster:url(${poster})`}>
     <video
       id={`v${id}`}

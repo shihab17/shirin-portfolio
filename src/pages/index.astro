@@ -5,7 +5,15 @@ import Base from '../layouts/Base.astro';
 import VideoCard from '../components/VideoCard.astro';
 import Icon from '../components/Icon.astro';
 import { site } from '../site';
-import { projects, videoPoster, videoSrc } from '../data/projects';
+import { projects, videoPoster, videoSrc, categoryLabel } from '../data/projects';
+import type { Category } from '../data/projects';
+
+const catOrder: Category[] = ['motion', 'cinematic', 'animation', 'ai', 'story'];
+const catCounts = projects.reduce<Record<string, number>>((m, p) => {
+  m[p.category] = (m[p.category] || 0) + 1;
+  return m;
+}, {});
+const cats = catOrder.filter((c) => catCounts[c]);
 
 const assets = import.meta.glob<{ default: ImageMetadata }>('../assets/*.jpg', {
   eager: true,
@@ -74,6 +82,7 @@ const jsonLd = {
           contentUrl: new URL(videoSrc(p.id), site.url).href,
           uploadDate: '2026-11-21',
           duration: p.durationIso,
+          genre: categoryLabel[p.category],
           author: { '@id': `${site.url}/#person` },
         },
       })),
@@ -134,8 +143,20 @@ const jsonLd = {
   <section id="work">
     <div class="ghost serif" data-hx="-.12" aria-hidden="true">Reels · Stories · Promos</div>
     <div class="wrap">
-      <h2 class="serif">Selected <em>Work</em></h2>
-      <p class="lead">A glimpse of my promotional and brand videos. Tap play on any project to watch. Full-length videos are shared on request.</p>
+      <div class="reel-head"><div>
+        <h2 class="serif">Selected <em>Work</em></h2>
+        <p class="lead">A glimpse of my promotional and brand videos. Tap play on any project to watch. Full-length videos are shared on request.</p>
+      </div>
+      <div class="rnav">
+        <button class="rbtn" type="button" data-dir="-1" aria-label="Scroll to previous projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button class="rbtn" type="button" data-dir="1" aria-label="Scroll to next projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div></div>
+      <div class="filters" role="group" aria-label="Filter projects by category">
+        <button class="chip act" type="button" data-cat="all">All<sup>{projects.length}</sup></button>
+        {cats.map((c) => (
+          <button class="chip" type="button" data-cat={c}>{categoryLabel[c]}<sup>{catCounts[c]}</sup></button>
+        ))}
+      </div>
       <div class="reel">
         {projects.map((p) => (
           <VideoCard
@@ -146,6 +167,7 @@ const jsonLd = {
             poster={posters[p.id]}
             src={videoSrc(p.id)}
             description={p.description}
+            category={p.category}
           />
         ))}
       </div>
