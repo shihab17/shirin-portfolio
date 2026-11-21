@@ -274,8 +274,8 @@ import { animate, inView } from 'motion';
           var cr = c.getBoundingClientRect();
           if (cr.right < rr.left || cr.left > rr.right) { c.style.opacity = ''; (c.style as any).scale = ''; return; }
           var f = Math.max(0, 1 - Math.abs(cr.left + cr.width / 2 - mid) / (rr.width * 0.55));
-          c.style.opacity = (0.45 + 0.55 * f).toFixed(3);
-          (c.style as any).scale = (0.93 + 0.12 * f).toFixed(3);
+          c.style.opacity = (0.38 + 0.62 * f).toFixed(3);
+          (c.style as any).scale = (0.9 + 0.18 * f).toFixed(3);
           if (f > bestF) { bestF = f; best = c; }
         });
         if (lastFocus !== best) {

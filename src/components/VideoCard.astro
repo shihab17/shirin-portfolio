@@ -26,6 +26,7 @@ const { id, title, kind, chips, poster, src, description, category } = Astro.pro
       aria-label={`${title} — ${description}`}
     ></video>
     <button class="play" type="button" aria-label={`Play ${title}`}><span></span></button>
+    <span class="snd" aria-hidden="true">Tap for sound</span>
     <i class="glare"></i>
     <b class="num serif" aria-hidden="true">{id}</b>
   </div>

@@ -55,13 +55,14 @@ h2 em{color:var(--gold);font-style:italic}
 .brands span{border:1px solid var(--line);padding:10px 22px;font:500 21px var(--serif);color:var(--ivory);border-radius:40px}
 
 /* video reel — horizontal film strip */
-.reel{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x proximity;padding:6px 2px 16px;
+.reel{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x proximity;padding:22px 2px 26px;
   scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior-x:contain;
   mask-image:linear-gradient(90deg,transparent,#000 34px,#000 calc(100% - 34px),transparent);
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 34px,#000 calc(100% - 34px),transparent)}
 .reel::-webkit-scrollbar{display:none}
 .reel.drag{scroll-snap-type:none}
-.vcard{flex:0 0 clamp(190px,22vw,270px);min-width:0;scroll-snap-align:start}
+.vcard{flex:0 0 clamp(190px,22vw,270px);min-width:0;scroll-snap-align:start;filter:saturate(.72) brightness(.88);transition:filter .45s ease}
+.vcard.focus{filter:none;position:relative;z-index:5}
 @media(max-width:620px){.vcard{flex-basis:72vw}}
 .reel-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
 .rnav{display:flex;gap:8px;margin-bottom:14px}
@@ -81,6 +82,9 @@ h2 em{color:var(--gold);font-style:italic}
 .vcard.focus .frame{border-color:var(--gold);box-shadow:0 30px 55px -24px rgba(0,0,0,.85),0 0 46px -8px rgba(227,201,149,.38)}
 .frame.preview .play{display:none}
 .frame.preview{cursor:pointer}
+.snd{position:absolute;right:10px;bottom:10px;z-index:4;padding:6px 12px;border-radius:20px;background:rgba(6,16,12,.62);border:1px solid var(--line);color:var(--gold);font:500 9px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;backdrop-filter:blur(6px);display:none}
+.frame.preview .snd{display:block;animation:sndin .4s ease .15s both}
+@keyframes sndin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .frame{position:relative;aspect-ratio:4/5;max-width:100%;overflow:hidden;background:#000;border:1px solid var(--line);isolation:isolate}
 .frame:before{content:"";position:absolute;inset:-30px;background:var(--poster) center/cover;filter:blur(26px) brightness(.5) saturate(1.2);z-index:-1}
 .frame video{width:100%;height:100%;object-fit:contain;display:block;background:transparent}
