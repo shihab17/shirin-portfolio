@@ -3,9 +3,14 @@
 import sharp from 'sharp';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { existsSync } from 'node:fs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const asset = (n) => join(root, 'src/assets', n);
+const asset = (n) => {
+  const p = join(root, 'src/assets', n);
+  if (!existsSync(p)) throw new Error(`Missing required asset: ${p}`);
+  return p;
+};
 const out = join(root, 'public/og-image.jpg');
 
 const W = 1200, H = 630;

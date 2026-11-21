@@ -3,9 +3,11 @@
 import sharp from 'sharp';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { existsSync } from 'node:fs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const svg = join(root, 'public/favicon.svg');
+if (!existsSync(svg)) throw new Error(`Missing required asset: ${svg}`);
 
 await sharp(svg, { density: 512 })
   .resize(180, 180)

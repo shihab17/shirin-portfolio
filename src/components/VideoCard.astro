@@ -1,4 +1,6 @@
 ---
+import type { Category } from '../data/projects';
+
 interface Props {
   id: string;
   title: string;
@@ -7,14 +9,14 @@ interface Props {
   poster: string;
   src: string;
   description: string;
-  category: string;
+  category: Category;
 }
 
 const { id, title, kind, chips, poster, src, description, category } = Astro.props;
 ---
 
 <article class="vcard" data-cat={category}>
-  <div class="frame" style={`--poster:url(${poster})`}>
+  <div class="frame" style={`--poster:url("${poster}")`}>
     <video
       id={`v${id}`}
       src={src}

@@ -18,7 +18,12 @@ const cats = catOrder.filter((c) => catCounts[c]);
 const assets = import.meta.glob<{ default: ImageMetadata }>('../assets/*.jpg', {
   eager: true,
 });
-const asset = (name: string) => assets[`../assets/${name}.jpg`].default;
+const asset = (name: string) => {
+  const key = `../assets/${name}.jpg`;
+  const mod = assets[key];
+  if (!mod) throw new Error(`Missing image asset: src/assets/${name}.jpg`);
+  return mod.default;
+};
 
 const marqueeItems = [
   ['Reels', 'reel'],
@@ -148,9 +153,9 @@ const jsonLd = {
         <p class="lead">A glimpse of my promotional and brand videos. Tap play on any project to watch. Full-length videos are shared on request.</p>
       </div></div>
       <div class="filters" role="group" aria-label="Filter projects by category">
-        <button class="chip act" type="button" data-cat="all">All<sup>{projects.length}</sup></button>
+        <button class="chip act" type="button" data-cat="all" aria-pressed="true">All<sup>{projects.length}</sup></button>
         {cats.map((c) => (
-          <button class="chip" type="button" data-cat={c}>{categoryLabel[c]}<sup>{catCounts[c]}</sup></button>
+          <button class="chip" type="button" data-cat={c} aria-pressed="false">{categoryLabel[c]}<sup>{catCounts[c]}</sup></button>
         ))}
       </div>
       <div class="reel-wrap">

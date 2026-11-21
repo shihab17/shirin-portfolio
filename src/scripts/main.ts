@@ -12,10 +12,19 @@ import { animate, inView } from 'motion';
 
   /* ---------- video players (always on) ---------- */
   (function () {
+    root.classList.add('js-video');
     function stopOthers(except: HTMLVideoElement | null) {
       $$('.frame').forEach(function (fr: HTMLElement) {
-        var vv = fr.querySelector('video');
-        if (vv !== except) { vv && vv.pause(); fr.classList.remove('preview'); }
+        var vv = fr.querySelector('video') as HTMLVideoElement | null;
+        if (!vv) return;
+        if (vv !== except) {
+          vv.pause();
+          (vv as any).__preview = false;
+          vv.controls = false;
+          fr.classList.remove('preview', 'on');
+        } else {
+          fr.classList.remove('preview');
+        }
       });
     }
     function realPlay(f: HTMLElement, v: HTMLVideoElement) {
@@ -133,6 +142,7 @@ import { animate, inView } from 'motion';
     /* ---------- horizontal reel: wheel, drag, arrows ---------- */
     if (reel) {
       reel.addEventListener('wheel', function (e: WheelEvent) {
+        focusHold = performance.now();
         if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
         var canL = reel!.scrollLeft > 0;
         var canR = reel!.scrollLeft + reel!.clientWidth < reel!.scrollWidth - 1;
@@ -143,22 +153,29 @@ import { animate, inView } from 'motion';
       }, { passive: false });
 
       var down = false, startX = 0, startL = 0, moved = false;
-      reel.addEventListener('pointerdown', function (e) { down = true; moved = false; startX = e.clientX; startL = reel!.scrollLeft; });
+      reel.addEventListener('pointerdown', function (e) {
+        focusHold = performance.now();
+        if (e.pointerType === 'touch') return;
+        down = true; moved = false; startX = e.clientX; startL = reel!.scrollLeft;
+      });
       addEventListener('pointermove', function (e) {
         if (!down) return;
         var dx = e.clientX - startX;
-        if (Math.abs(dx) > 4) { moved = true; reel!.classList.add('drag'); }
+        if (Math.abs(dx) > 10) { moved = true; reel!.classList.add('drag'); }
         reel!.scrollLeft = startL - dx;
       });
       addEventListener('pointerup', function () { down = false; setTimeout(function () { reel!.classList.remove('drag'); }, 0); });
+      addEventListener('pointercancel', function () { down = false; reel!.classList.remove('drag'); });
       reel.addEventListener('click', function (e) {
         if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
       }, true);
 
       $$('.rnav').forEach(function (b) {
         b.addEventListener('click', function () {
+          focusHold = performance.now();
           var dir = parseFloat(b.getAttribute('data-dir') || '1');
-          var step = ((cards[0] as HTMLElement).getBoundingClientRect().width || 300) + 20;
+          var firstVisible = ($('.vcard:not(.hide)') as HTMLElement) || (cards[0] as HTMLElement);
+          var step = (firstVisible.getBoundingClientRect().width || 300) + 20;
           reel!.scrollBy({ left: dir * step, behavior: 'smooth' });
         });
       });
@@ -201,7 +218,10 @@ import { animate, inView } from 'motion';
     }
     $$('.chip').forEach(function (chip) {
       chip.addEventListener('click', function () {
-        $$('.chip').forEach(function (c) { c.classList.toggle('act', c === chip); });
+        $$('.chip').forEach(function (c) {
+          c.classList.toggle('act', c === chip);
+          c.setAttribute('aria-pressed', c === chip ? 'true' : 'false');
+        });
         var cat = chip.getAttribute('data-cat');
         var vis: HTMLElement[] = [];
         cards.forEach(function (c: HTMLElement) {
