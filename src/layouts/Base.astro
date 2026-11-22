@@ -6,10 +6,12 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  ogType?: string;
+  video?: { url: string; duration?: number; releaseDate?: string };
   jsonLd?: Record<string, unknown>;
 }
 
-const { title, description, ogImage, jsonLd } = Astro.props;
+const { title, description, ogImage, ogType, video, jsonLd } = Astro.props;
 ---
 
 <!doctype html>
@@ -21,7 +23,7 @@ const { title, description, ogImage, jsonLd } = Astro.props;
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="manifest" href="/site.webmanifest" />
-<Seo title={title} description={description} ogImage={ogImage} />
+<Seo title={title} description={description} ogImage={ogImage} ogType={ogType} video={video} />
 {jsonLd && (
   <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
 )}

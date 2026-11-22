@@ -10,12 +10,13 @@ import {
   categoryLabel,
   projectSlug,
 } from '../../data/projects';
-import { fetchProjects } from '../../lib/sanity';
+import { fetchProjects, fetchSiteSettings } from '../../lib/sanity';
 import type { CmsProject } from '../../lib/sanity';
 
 export async function getStaticPaths() {
   const cms = await fetchProjects();
-  const list = cms.length ? cms : localProjects;
+  const list = (cms.length ? cms : localProjects) as CmsProject[];
+  const cfg = { ...site, ...((await fetchSiteSettings()) ?? {}) };
   const assets = import.meta.glob<{ default: ImageMetadata }>('../../assets/*.jpg', {
     eager: true,
   });
@@ -25,9 +26,17 @@ export async function getStaticPaths() {
     return mod.default;
   };
 
+  // Small thumbs for the related-work cards — one pass over the list.
+  const thumbs: Record<string, string> = {};
+  for (const p of list) {
+    thumbs[p.id] = p.posterUrl
+      ? p.posterUrl
+      : (await getImage({ src: localPoster(p.id), format: 'webp', width: 640 })).src;
+  }
+
   const paths = [];
   for (let i = 0; i < list.length; i++) {
-    const p = list[i] as CmsProject;
+    const p = list[i];
     const poster = p.posterUrl
       ? p.posterUrl
       : (await getImage({ src: localPoster(p.id), format: 'webp', width: 1080 })).src;
@@ -37,9 +46,28 @@ export async function getStaticPaths() {
     const ogImage = p.posterOgUrl ?? '/og-image.jpg';
     const mkNav = (q: CmsProject | undefined) =>
       q ? { slug: projectSlug(q), title: q.title } : null;
+    const related = list
+      .filter((q) => q !== p && q.category === p.category)
+      .slice(0, 3)
+      .map((q) => ({
+        slug: projectSlug(q),
+        title: q.title,
+        kind: q.kind,
+        poster: thumbs[q.id],
+      }));
     paths.push({
       params: { slug: projectSlug(p) },
-      props: { p, poster, src, ogImage, prev: mkNav(list[i - 1]), next: mkNav(list[i + 1]) },
+      props: {
+        p,
+        poster,
+        src,
+        ogImage,
+        prev: mkNav(list[i - 1]),
+        next: mkNav(list[i + 1]),
+        related,
+        whatsapp: cfg.whatsapp,
+        whatsappLabel: cfg.whatsappLabel,
+      },
     });
   }
   return paths;
@@ -52,25 +80,67 @@ interface Props {
   ogImage: string;
   prev: { slug: string; title: string } | null;
   next: { slug: string; title: string } | null;
+  related: { slug: string; title: string; kind: string; poster: string }[];
+  whatsapp?: string;
+  whatsappLabel?: string;
 }
 
-const { p, poster, src, ogImage, prev, next } = Astro.props;
+const { p, poster, src, ogImage, prev, next, related, whatsapp, whatsappLabel } = Astro.props;
 const pageUrl = new URL(`/work/${projectSlug(p)}`, site.url).href;
+
+// "PT1M22S" → parts for display ("1 min 22 sec") and og:video duration (82).
+const durParts = (() => {
+  const m = p.durationIso?.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:([\d.]+)S)?/);
+  if (!m) return null;
+  return { h: +(m[1] || 0), m: +(m[2] || 0), s: +(+m[3] || 0).toFixed(0) };
+})();
+const duration = durParts
+  ? durParts.h
+    ? `${durParts.h} hr ${durParts.m} min`
+    : `${durParts.m} min ${durParts.s} sec`
+  : undefined;
+const durationSecs = durParts ? durParts.h * 3600 + durParts.m * 60 + durParts.s : undefined;
+const year = p.uploadDate?.slice(0, 4);
+
+const facts: [string, string][] = [
+  ['Client', p.client],
+  ['Category', categoryLabel[p.category]],
+  ['Services', p.services?.length ? p.services.join(', ') : undefined],
+  ['Duration', duration],
+  ['Year', year],
+  ['Tools', p.tools?.length ? p.tools.join(', ') : undefined],
+].filter((f): f is [string, string] => !!f[1]);
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
+      '@type': 'Person',
+      '@id': `${site.url}/#person`,
+      name: site.name,
+      jobTitle: 'Promotional Video Editor',
+      url: site.url,
+    },
+    {
       '@type': 'VideoObject',
+      '@id': `${pageUrl}#video`,
       name: `${p.title} — ${p.kind}`,
       description: p.description,
       thumbnailUrl: new URL(poster, site.url).href,
       contentUrl: new URL(src, site.url).href,
+      embedUrl: pageUrl,
+      mainEntityOfPage: pageUrl,
       url: pageUrl,
       uploadDate: p.uploadDate || '2026-11-21',
       duration: p.durationIso,
       genre: categoryLabel[p.category],
+      inLanguage: ['en', 'bn'],
+      isFamilyFriendly: true,
+      ...(p.client && {
+        productionCompany: { '@type': 'Organization', name: p.client },
+      }),
       author: { '@id': `${site.url}/#person` },
+      potentialAction: { '@type': 'WatchAction', target: pageUrl },
     },
     {
       '@type': 'BreadcrumbList',
@@ -85,33 +155,92 @@ const jsonLd = {
 ---
 
 <Base
-  title={`${p.title} — ${site.name}`}
+  title={`${p.title} — ${p.kind || categoryLabel[p.category]} | ${site.name}`}
   description={p.description}
   ogImage={ogImage}
+  ogType="video.other"
+  video={{ url: src, duration: durationSecs, releaseDate: p.uploadDate }}
   jsonLd={jsonLd}
 >
   <main class="wpage">
     <div class="wrap">
-      <a class="wback" href="/#work">← All work</a>
-      <p class="tag">{p.kind} · {categoryLabel[p.category]}</p>
-      <h1 class="serif">{p.title}</h1>
-      <div class="chips">{p.chips.map((c) => <span>{c}</span>)}</div>
-      <div class="wframe" style={`--poster:url("${poster}")`}>
-        <video
-          src={src}
-          poster={poster}
-          controls
-          playsinline
-          preload="metadata"
-          controlslist="nodownload"
-          aria-label={`${p.title} — ${p.description}`}
-        ></video>
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><i aria-hidden="true">/</i>
+        <a href="/#work">Work</a><i aria-hidden="true">/</i>
+        <span aria-current="page">{p.title}</span>
+      </nav>
+
+      <div class="wgrid">
+        <div class="wmain">
+          <p class="tag">{p.kind} · {categoryLabel[p.category]}</p>
+          <h1 class="serif">{p.title}</h1>
+          <div class="chips">{p.chips.map((c) => <span>{c}</span>)}</div>
+          <div class="wframe" style={`--poster:url("${poster}")`}>
+            <video
+              src={src}
+              poster={poster}
+              controls
+              playsinline
+              preload="metadata"
+              controlslist="nodownload"
+              aria-label={`${p.title} — ${p.description}`}
+            ></video>
+          </div>
+          <h2 class="wsec serif">About this project</h2>
+          <div class="wdesc">
+            {p.description.split(/\n+/).filter(Boolean).map((para) => <p>{para}</p>)}
+          </div>
+          {p.gallery && p.gallery.length > 0 && (
+            <div class="wgallery">
+              {p.gallery.map((g) => (
+                <img src={g.src} alt={g.alt || `${p.title} — still`} loading="lazy" />
+              ))}
+            </div>
+          )}
+        </div>
+
+        <aside class="wfacts">
+          <h2 class="wflabel">Project details</h2>
+          <dl>
+            {facts.map(([k, v]) => (
+              <div><dt>{k}</dt><dd>{v}</dd></div>
+            ))}
+          </dl>
+          {p.externalLink && (
+            <a class="btn f" href={p.externalLink} target="_blank" rel="noopener noreferrer">
+              Watch full video
+            </a>
+          )}
+          {whatsapp && <a class="btn" href={whatsapp}>Start a project</a>}
+        </aside>
       </div>
-      <p class="wdesc">{p.description}</p>
+
+      {related.length > 0 && (
+        <section class="wrelated" aria-labelledby="wrel-h">
+          <h2 class="serif" id="wrel-h">More {categoryLabel[p.category]} work</h2>
+          <div class="wrel-grid">
+            {related.map((r) => (
+              <a class="rcard" href={`/work/${r.slug}`}>
+                <img src={r.poster} alt={`${r.title} — ${r.kind}`} loading="lazy" />
+                <h3 class="serif">{r.title}</h3>
+                <p>{r.kind}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
       <nav class="wpnav" aria-label="More work">
         {prev ? <a href={`/work/${prev.slug}`}>← {prev.title}</a> : <span></span>}
         {next ? <a href={`/work/${next.slug}`}>{next.title} →</a> : <span></span>}
       </nav>
+
+      <div class="wcta">
+        <p class="tag">Let's create together</p>
+        <h2 class="serif">Want a video like this?</h2>
+        <p>Tell me about your product — I'll handle the story, motion and polish.</p>
+        {whatsapp && <a class="btn f" href={whatsapp}>{whatsappLabel || 'Message on WhatsApp'}</a>}
+      </div>
     </div>
   </main>
 </Base>

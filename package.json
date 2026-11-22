@@ -16,6 +16,7 @@
     "@astrojs/sitemap": "^3.7.6",
     "@sanity/client": "^8.17.0",
     "@sanity/image-url": "^2.2.0",
+    "@sanity/orderable-document-list": "^2.0.29",
     "astro": "^7.3.8",
     "motion": "^14.14.0",
     "react": "^19.3.1",

@@ -19,11 +19,18 @@ export interface CmsProject extends Project {
   videoUrl?: string;
   featured?: boolean;
   slug?: string;
+  client?: string;
+  services?: string[];
+  tools?: string[];
+  externalLink?: string;
+  gallery?: { src: string; alt: string }[];
 }
 
-const QUERY = `*[_type == "project"] | order(order asc, _createdAt asc) {
-  id, order, title, kind, chips, category, description, durationIso, uploadDate,
-  featured, poster, "videoUrl": video.asset->url, "slug": slug.current
+const QUERY = `*[_type == "project"] | order(orderRank) {
+  title, kind, chips, category, description, durationIso, uploadDate,
+  featured, poster, "videoUrl": video.asset->url, "slug": slug.current,
+  client, services, tools, externalLink,
+  "gallery": gallery[]{ alt, "src": asset->url }
 }`;
 
 export async function fetchProjects(): Promise<CmsProject[]> {
@@ -31,7 +38,7 @@ export async function fetchProjects(): Promise<CmsProject[]> {
     const docs = await sanityClient.fetch(QUERY);
     if (!Array.isArray(docs) || docs.length === 0) return [];
     return docs.map((d: any, i: number) => ({
-      id: d.id || String(i + 1).padStart(2, '0'),
+      id: String(i + 1).padStart(2, '0'),
       title: d.title || 'Untitled',
       kind: d.kind || '',
       chips: Array.isArray(d.chips) ? d.chips : [],
@@ -48,6 +55,15 @@ export async function fetchProjects(): Promise<CmsProject[]> {
         ? builder.image(d.poster).width(1200).height(630).fit('crop').auto('format').url()
         : undefined,
       videoUrl: d.videoUrl || undefined,
+      client: d.client || undefined,
+      services: Array.isArray(d.services) ? d.services : [],
+      tools: Array.isArray(d.tools) ? d.tools : [],
+      externalLink: d.externalLink || undefined,
+      gallery: Array.isArray(d.gallery)
+        ? d.gallery
+            .filter((g: any) => g && g.src)
+            .map((g: any) => ({ src: `${g.src}?w=1080&auto=format`, alt: g.alt || '' }))
+        : [],
     }));
   } catch (e) {
     console.warn('[sanity] fetchProjects failed, using local data:', e);
@@ -63,7 +79,7 @@ export interface CmsBrand {
   logoUrl?: string;
 }
 
-const BRANDS_QUERY = `*[_type == "brand"] | order(order asc, _createdAt asc) {
+const BRANDS_QUERY = `*[_type == "brand"] | order(orderRank) {
   name, monogram, service, link, logo
 }`;
 
@@ -92,7 +108,7 @@ export interface CmsConcept {
   imageUrl: string;
 }
 
-const CONCEPTS_QUERY = `*[_type == "concept"] | order(order asc, _createdAt asc) {
+const CONCEPTS_QUERY = `*[_type == "concept"] | order(orderRank) {
   caption, alt, image
 }`;
 
