@@ -108,6 +108,37 @@ const project = defineType({
       description: 'YouTube/Drive link to the full-length version — shown as a button',
     }),
     defineField({
+      name: 'process',
+      title: 'Process — how it was made',
+      type: 'array',
+      group: 'details',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({ name: 'step', type: 'string', validation: (r) => r.required() }),
+            defineField({ name: 'note', type: 'string' }),
+          ],
+          preview: { select: { title: 'step', subtitle: 'note' } },
+        },
+      ],
+      description: 'e.g. step "Hook" note "First 3 seconds built around the offer"',
+    }),
+    defineField({
+      name: 'testimonialQuote',
+      title: 'Client testimonial — quote',
+      type: 'text',
+      rows: 2,
+      group: 'details',
+    }),
+    defineField({
+      name: 'testimonialAuthor',
+      title: 'Client testimonial — name / role',
+      type: 'string',
+      group: 'details',
+      description: 'e.g. "Rahim — Founder, Shopkeeper App"',
+    }),
+    defineField({
       name: 'durationIso',
       title: 'Duration (ISO-8601)',
       type: 'string',

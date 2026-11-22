@@ -4,7 +4,7 @@ export const GET: APIRoute = ({ site }) => {
   const base =
     site?.origin ?? 'https://shirin-portfolio.shihabahmed620.workers.dev';
   return new Response(
-    `User-agent: *\nAllow: /\n\nSitemap: ${base}/sitemap-index.xml\n`,
+    `User-agent: *\nAllow: /\n\nSitemap: ${base}/sitemap-index.xml\nSitemap: ${base}/video-sitemap.xml\n`,
     { headers: { 'Content-Type': 'text/plain; charset=utf-8' } }
   );
 };

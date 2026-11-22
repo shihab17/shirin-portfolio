@@ -11,13 +11,14 @@ interface Props {
   description: string;
   category: Category;
   href?: string;
+  vname?: string;
 }
 
-const { id, title, kind, chips, poster, src, description, category, href } = Astro.props;
+const { id, title, kind, chips, poster, src, description, category, href, vname } = Astro.props;
 ---
 
 <article class="vcard" data-cat={category}>
-  <div class="frame" style={`--poster:url("${poster}")`}>
+  <div class="frame" style={`--poster:url("${poster}")${vname ? `;view-transition-name:work-${vname}` : ''}`}>
     <video
       id={`v${id}`}
       src={src}

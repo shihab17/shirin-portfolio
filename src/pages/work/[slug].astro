@@ -45,7 +45,9 @@ export async function getStaticPaths() {
     // to the site-wide OG image.
     const ogImage = p.posterOgUrl ?? '/og-image.jpg';
     const mkNav = (q: CmsProject | undefined) =>
-      q ? { slug: projectSlug(q), title: q.title } : null;
+      q
+        ? { slug: projectSlug(q), title: q.title, kind: q.kind, poster: thumbs[q.id] }
+        : null;
     const related = list
       .filter((q) => q !== p && q.category === p.category)
       .slice(0, 3)
@@ -78,8 +80,8 @@ interface Props {
   poster: string;
   src: string;
   ogImage: string;
-  prev: { slug: string; title: string } | null;
-  next: { slug: string; title: string } | null;
+  prev: { slug: string; title: string; kind: string; poster: string } | null;
+  next: { slug: string; title: string; kind: string; poster: string } | null;
   related: { slug: string; title: string; kind: string; poster: string }[];
   whatsapp?: string;
   whatsappLabel?: string;
@@ -150,6 +152,20 @@ const jsonLd = {
         { '@type': 'ListItem', position: 3, name: p.title, item: pageUrl },
       ],
     },
+    ...(related.length
+      ? [
+          {
+            '@type': 'ItemList',
+            name: `More ${categoryLabel[p.category]} work`,
+            itemListElement: related.map((r, i) => ({
+              '@type': 'ListItem',
+              position: i + 1,
+              name: r.title,
+              url: new URL(`/work/${r.slug}`, site.url).href,
+            })),
+          },
+        ]
+      : []),
   ],
 };
 ---
@@ -160,9 +176,11 @@ const jsonLd = {
   ogImage={ogImage}
   ogType="video.other"
   video={{ url: src, duration: durationSecs, releaseDate: p.uploadDate }}
+  preloadImage={poster}
   jsonLd={jsonLd}
 >
   <main class="wpage">
+    <div class="cur" aria-hidden="true"><div class="cdot"></div><div class="cring"><b><span>Play</span></b></div></div>
     <div class="wrap">
       <nav class="crumbs" aria-label="Breadcrumb">
         <a href="/">Home</a><i aria-hidden="true">/</i>
@@ -175,7 +193,7 @@ const jsonLd = {
           <p class="tag">{p.kind} · {categoryLabel[p.category]}</p>
           <h1 class="serif">{p.title}</h1>
           <div class="chips">{p.chips.map((c) => <span>{c}</span>)}</div>
-          <div class="wframe" style={`--poster:url("${poster}")`}>
+          <div class="wframe" style={`--poster:url("${poster}");view-transition-name:work-${projectSlug(p)}`}>
             <video
               src={src}
               poster={poster}
@@ -185,6 +203,9 @@ const jsonLd = {
               controlslist="nodownload"
               aria-label={`${p.title} — ${p.description}`}
             ></video>
+            <button class="play" type="button" aria-label={`Play ${p.title}`}><span></span></button>
+            <span class="snd" aria-hidden="true">Tap for sound</span>
+            <i class="glare" aria-hidden="true"></i>
           </div>
           <h2 class="wsec serif">About this project</h2>
           <div class="wdesc">
@@ -193,9 +214,36 @@ const jsonLd = {
           {p.gallery && p.gallery.length > 0 && (
             <div class="wgallery">
               {p.gallery.map((g) => (
-                <img src={g.src} alt={g.alt || `${p.title} — still`} loading="lazy" />
+                <img
+                  src={g.src}
+                  alt={g.alt || `${p.title} — still`}
+                  loading="lazy"
+                  tabindex="0"
+                  role="button"
+                  aria-label={`View ${g.alt || 'still'} full size`}
+                />
               ))}
             </div>
+          )}
+          {p.process && p.process.length > 0 && (
+            <div class="wprocess">
+              <h2 class="wsec serif">How this was made</h2>
+              <div class="steps">
+                {p.process.map((s, i) => (
+                  <div class="step">
+                    <b>{String(i + 1).padStart(2, '0')}</b>
+                    <h3>{s.step}</h3>
+                    {s.note && <p>{s.note}</p>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {p.testimonialQuote && (
+            <blockquote class="wquote">
+              <p>“{p.testimonialQuote}”</p>
+              {p.testimonialAuthor && <cite>— {p.testimonialAuthor}</cite>}
+            </blockquote>
           )}
         </div>
 
@@ -221,7 +269,7 @@ const jsonLd = {
           <div class="wrel-grid">
             {related.map((r) => (
               <a class="rcard" href={`/work/${r.slug}`}>
-                <img src={r.poster} alt={`${r.title} — ${r.kind}`} loading="lazy" />
+                <img src={r.poster} alt={`${r.title} — ${r.kind}`} loading="lazy" style={`view-transition-name:work-${r.slug}`} />
                 <h3 class="serif">{r.title}</h3>
                 <p>{r.kind}</p>
               </a>
@@ -230,10 +278,18 @@ const jsonLd = {
         </section>
       )}
 
-      <nav class="wpnav" aria-label="More work">
-        {prev ? <a href={`/work/${prev.slug}`}>← {prev.title}</a> : <span></span>}
-        {next ? <a href={`/work/${next.slug}`}>{next.title} →</a> : <span></span>}
-      </nav>
+      <div class="wflow">
+        {prev && <a class="wprev" href={`/work/${prev.slug}`}>← {prev.title}</a>}
+        <a
+          class="wnext"
+          href={next ? `/work/${next.slug}` : '/#work'}
+        >
+          {next && <div class="wnbg" style={`background-image:url("${next.poster}");view-transition-name:work-${next.slug}`} aria-hidden="true" />}
+          <span class="tag">{next ? 'Next project' : 'Back to'}</span>
+          <h2 class="serif">{next ? next.title : 'All work'}</h2>
+          {next && <p>{next.kind}</p>}
+        </a>
+      </div>
 
       <div class="wcta">
         <p class="tag">Let's create together</p>
@@ -243,4 +299,7 @@ const jsonLd = {
       </div>
     </div>
   </main>
+  <script>
+    import '../../scripts/work';
+  </script>
 </Base>

@@ -24,13 +24,17 @@ export interface CmsProject extends Project {
   tools?: string[];
   externalLink?: string;
   gallery?: { src: string; alt: string }[];
+  process?: { step: string; note?: string }[];
+  testimonialQuote?: string;
+  testimonialAuthor?: string;
 }
 
 const QUERY = `*[_type == "project"] | order(orderRank) {
   title, kind, chips, category, description, durationIso, uploadDate,
   featured, poster, "videoUrl": video.asset->url, "slug": slug.current,
-  client, services, tools, externalLink,
-  "gallery": gallery[]{ alt, "src": asset->url }
+  client, services, tools, externalLink, testimonialQuote, testimonialAuthor,
+  "gallery": gallery[]{ alt, "src": asset->url },
+  "process": process[]{ step, note }
 }`;
 
 export async function fetchProjects(): Promise<CmsProject[]> {
@@ -64,6 +68,11 @@ export async function fetchProjects(): Promise<CmsProject[]> {
             .filter((g: any) => g && g.src)
             .map((g: any) => ({ src: `${g.src}?w=1080&auto=format`, alt: g.alt || '' }))
         : [],
+      process: Array.isArray(d.process)
+        ? d.process.filter((s: any) => s && s.step)
+        : [],
+      testimonialQuote: d.testimonialQuote || undefined,
+      testimonialAuthor: d.testimonialAuthor || undefined,
     }));
   } catch (e) {
     console.warn('[sanity] fetchProjects failed, using local data:', e);
